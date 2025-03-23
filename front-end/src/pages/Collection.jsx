@@ -66,10 +66,6 @@ const Collection = () => {
   }
 
   useEffect(() => {
-    setFilteredProducts(products)
-  }, [products])
-
-  useEffect(() => {
     applyFilter()
   }, [category, subCategory, search])
 

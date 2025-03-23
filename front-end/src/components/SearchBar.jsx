@@ -14,7 +14,7 @@ const SearchBar = () => {
         } else {
             setVisible(false)
         }
-    }, [location,showSearch])
+    }, [location, showSearch])
 
     return (
         <>
@@ -25,7 +25,7 @@ const SearchBar = () => {
                 </div>
                 <img onClick={() => setShowSearch(false)} src={assets.cross_icon} className='inline w-3 cursor-pointer' alt="" />
             </div>}
-            {visible && null}
+            {!visible && <div className='opacity-0'></div>}
         </>
     )
 }
