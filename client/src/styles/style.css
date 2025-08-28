@@ -1,0 +1,34 @@
+.center-main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+}
+
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: auto;
+    width: auto;
+}
+
+.screen {
+    height: 100vh;
+    width: 100vw;
+}
+
+.outlet-container{
+    width: auto;
+    height: 850px;
+    overflow: scroll;
+}
+
+.h-auto{
+    height: auto;
+}
+
+.pointer {
+    cursor: pointer;
+}

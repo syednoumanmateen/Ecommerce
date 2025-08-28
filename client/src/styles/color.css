@@ -1,0 +1,7 @@
+.text-primary {
+    color: var(--primary)
+}
+
+.text-dark {
+    color: var(--color)
+}
