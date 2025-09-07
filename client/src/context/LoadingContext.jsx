@@ -1,21 +1,25 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useCallback } from "react";
 
-const LoadingContext = createContext();
+const LoadingContext = createContext(null);
 
 export const LoadingProvider = ({ children }) => {
-    const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-    const setLoading = (value) => {
-        setIsLoading(value);
-    };
+  const setLoading = useCallback((value) => {
+    setIsLoading(value);
+  }, []);
 
-    return (
-        <LoadingContext.Provider value={{ isLoading, setLoading }}>
-            {children}
-        </LoadingContext.Provider>
-    );
+  return (
+    <LoadingContext.Provider value={{ isLoading, setLoading }}>
+      {children}
+    </LoadingContext.Provider>
+  );
 };
 
 export const useLoading = () => {
-    return useContext(LoadingContext);
+  const context = useContext(LoadingContext);
+  if (!context) {
+    throw new Error("useLoading must be used within a LoadingProvider");
+  }
+  return context;
 };

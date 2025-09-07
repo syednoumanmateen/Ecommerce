@@ -27,7 +27,18 @@ const addCategory = async (req, res) => {
 // Get all categories
 const getCategories = async (req, res) => {
   try {
-    const categories = await Category.find();
+    const categories = await Category.aggregate([
+      {
+        $project: {
+          _id: 1,
+          name: 1,
+          slug: 1,
+          parent: 1,
+          description: 1,
+          image: 1,
+        }
+      }
+    ]);
 
     res.status(200).json({
       data: categories,
@@ -35,7 +46,6 @@ const getCategories = async (req, res) => {
       status: 200,
     });
   } catch (error) {
-    console.error("Get categories error:", error.message);
     res.status(500).json({
       error: "Internal server error",
       message: error.message,
@@ -44,15 +54,30 @@ const getCategories = async (req, res) => {
   }
 };
 
+
 // Get single category
 const getCategory = async (req, res) => {
   try {
     const { id } = req.params;
-    if (!isValidObjectId(id)) {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
       return res.status(400).json({ error: "Invalid category ID", status: 400 });
     }
 
-    const category = await Category.findById(id);
+    const [category] = await Category.aggregate([
+      { $match: { _id: new mongoose.Types.ObjectId(id) } },
+      {
+        $project: {
+          _id: 1,
+          name: 1,
+          slug: 1,
+          parent: 1,
+          description: 1,
+          image: 1,
+        }
+      },
+      { $limit: 1 }
+    ]);
+
     if (!category) {
       return res.status(404).json({ error: "Category not found", status: 404 });
     }
@@ -63,7 +88,6 @@ const getCategory = async (req, res) => {
       status: 200,
     });
   } catch (error) {
-    console.error("Get category error:", error.message);
     res.status(500).json({
       error: "Internal server error",
       message: error.message,
@@ -71,6 +95,7 @@ const getCategory = async (req, res) => {
     });
   }
 };
+
 
 // Update category
 const updateCategory = async (req, res) => {

@@ -6,8 +6,10 @@ import {
   updateUserProfile,
   forgotPassword,
   resetPassword,
+  verifyToken,
 } from "../api/api";
 import { useLoading } from "../context/LoadingContext";
+import { useCallback } from "react";
 
 export const useRegister = () => {
   const { setLoading } = useLoading();
@@ -93,5 +95,19 @@ export const useUpdateUserProfile = () => {
       }
     },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["user"] }),
+  });
+};
+
+export const useVerifyToken = () => {
+  const { setLoading } = useLoading();
+  return useMutation({
+    mutationFn: async (token) => {
+      setLoading(true);
+      try {
+        return await verifyToken(token);
+      } finally {
+        setLoading(false);
+      }
+    }
   });
 };

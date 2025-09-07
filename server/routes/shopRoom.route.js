@@ -1,6 +1,6 @@
 const express = require("express");
 const { addShopRoom, getShopRooms, getShopRoom, updateShopRoom, deleteShopRoom } = require("../controllers/shopRoom.controller");
-const protect = require("../middleware")
+const { protect } = require("../middleware")
 const router = express.Router();
 
 router.post("/", protect, addShopRoom);

@@ -61,7 +61,7 @@ const ForgotPassword = () => {
           </div>
 
           <Button type="submit" className="py-2 px-5" disabled={isLoading}>
-            {isLoading ? <Loader className="h-5 w-5 mx-auto" /> : "Send Reset Link"}
+            Send Reset Link
           </Button>
         </form>
       </CardBody>

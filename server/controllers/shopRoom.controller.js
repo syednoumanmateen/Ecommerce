@@ -27,7 +27,36 @@ const addShopRoom = async (req, res) => {
 // Get all
 const getShopRooms = async (req, res) => {
   try {
-    const shopRooms = await ShopRoom.find();
+    const shopRooms = await ShopRoom.aggregate([
+      {
+        $lookup: {
+          from: "categories",
+          localField: "categories",
+          foreignField: "_id",
+          as: "categories"
+        }
+      },
+      {
+        $lookup: {
+          from: "products",
+          localField: "featuredProducts",
+          foreignField: "_id",
+          as: "featuredProducts"
+        }
+      },
+      {
+        $project: {
+          name: 1,
+          slug: 1,
+          description: 1,
+          image: 1,
+          categories: { _id: 1, name: 1 },
+          featuredProducts: { _id: 1, name: 1, price: 1 },
+          createdAt: 1,
+          updatedAt: 1
+        }
+      }
+    ]);
 
     res.status(200).json({
       data: shopRooms,
@@ -35,7 +64,6 @@ const getShopRooms = async (req, res) => {
       status: 200
     });
   } catch (error) {
-    console.error("Get ShopRooms error:", error.message);
     res.status(500).json({
       error: "Internal server error",
       message: error.message,
@@ -44,15 +72,48 @@ const getShopRooms = async (req, res) => {
   }
 };
 
+
 // Get one
 const getShopRoom = async (req, res) => {
   try {
     const { id } = req.params;
-    if (!isValidObjectId(id)) {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
       return res.status(400).json({ error: "Invalid Shop Room ID", status: 400 });
     }
 
-    const shopRoom = await ShopRoom.findById(id);
+    const [shopRoom] = await ShopRoom.aggregate([
+      { $match: { _id: new mongoose.Types.ObjectId(id) } },
+      {
+        $lookup: {
+          from: "categories",
+          localField: "categories",
+          foreignField: "_id",
+          as: "categories"
+        }
+      },
+      {
+        $lookup: {
+          from: "products",
+          localField: "featuredProducts",
+          foreignField: "_id",
+          as: "featuredProducts"
+        }
+      },
+      {
+        $project: {
+          name: 1,
+          slug: 1,
+          description: 1,
+          image: 1,
+          categories: { _id: 1, name: 1 },
+          featuredProducts: { _id: 1, name: 1, price: 1 },
+          createdAt: 1,
+          updatedAt: 1
+        }
+      },
+      { $limit: 1 }
+    ]);
+
     if (!shopRoom) {
       return res.status(404).json({ error: "Shop Room not found", status: 404 });
     }
@@ -63,7 +124,6 @@ const getShopRoom = async (req, res) => {
       status: 200
     });
   } catch (error) {
-    console.error("Get ShopRoom error:", error.message);
     res.status(500).json({
       error: "Internal server error",
       message: error.message,

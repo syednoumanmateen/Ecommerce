@@ -39,7 +39,7 @@ const Login = () => {
         await mutateAsync(data, {
             onSuccess: (response) => {
                 toast.success("Logged in successfully!");
-                setUser(response?.data?.token);
+                setUser(response?.data);
                 navigate("/");
             },
             onError: (err) => {
@@ -95,7 +95,7 @@ const Login = () => {
                     </div>
 
                     <Button className="py-2 px-5" type="submit" disabled={isLoading}>
-                        {isLoading ? <Loader className="h-5 w-5 mx-auto" /> : "Login"}
+                        Login
                     </Button>
 
                     <p className="text-center text-sm mt-6">

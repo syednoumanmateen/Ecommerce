@@ -3,13 +3,47 @@ const Wishlist = require("../models/wishlist.model");
 // GET: Get Wishlist by User ID
 const getWishlist = async (req, res) => {
   try {
-    const wishlist = await Wishlist.findOne({ user: req.params.userId }).populate("products");
-    res.status(200).json(wishlist || { user: req.params.userId, products: [] });
+    const { userId } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      return res.status(400).json({ error: "Invalid user ID" });
+    }
+
+    const [wishlist] = await Wishlist.aggregate([
+      { $match: { user: new mongoose.Types.ObjectId(userId) } },
+      {
+        $lookup: {
+          from: "products",
+          localField: "products",
+          foreignField: "_id",
+          as: "products"
+        }
+      },
+      { $limit: 1 },
+      {
+        $project: {
+          user: 1,
+          products: {
+            _id: 1,
+            name: 1,
+            price: 1,
+            stock: 1,
+            category: 1,
+            images: 1
+          }
+        }
+      }
+    ]);
+
+    res.status(200).json(
+      wishlist || { user: userId, products: [] }
+    );
   } catch (error) {
     console.error("Get Wishlist Error:", error.message);
     res.status(500).json({ error: "Failed to fetch wishlist" });
   }
 };
+
 
 // POST: Add Product to Wishlist
 const addToWishlist = async (req, res) => {

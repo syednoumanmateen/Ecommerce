@@ -3,7 +3,7 @@ import { useBrands } from "../../api/brandApiHooks";
 import Table from "../../components/UI/Table";
 
 const List = () => {
-  const { data: apiData, isLoading, error } = useBrands();
+  const { data: apiData, error } = useBrands();
 
   const columns = [
     { key: 'name', header: 'Name', width: '30%', align: 'left', sortable: true },
@@ -12,8 +12,6 @@ const List = () => {
   ];
 
   const data = apiData && apiData.length && apiData;
-
-  if (isLoading) return <div>Loading...</div>;
 
   if (error) toast.error(error.message);
 

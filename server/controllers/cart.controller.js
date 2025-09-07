@@ -43,10 +43,41 @@ const getCart = async (req, res) => {
     const { userId } = req.params;
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
 
-    const cart = await Cart.findOne({ user: userId }).populate("items.product");
+    const carts = await Cart.aggregate([
+      { $match: { user: new mongoose.Types.ObjectId(userId) } },
+      { $unwind: { path: "$items", preserveNullAndEmptyArrays: true } },
+      {
+        $lookup: {
+          from: "products",
+          localField: "items.product",
+          foreignField: "_id",
+          as: "items.productDetails"
+        }
+      },
+      {
+        $addFields: {
+          "items.product": { $arrayElemAt: ["$items.productDetails", 0] }
+        }
+      },
+      { $project: { "items.productDetails": 0 } },
+      { $sort: { "items._id": 1 } },
+      { $skip: skip },
+      { $limit: limit },
+      {
+        $group: {
+          _id: "$_id",
+          user: { $first: "$user" },
+          totalAmount: { $first: "$totalAmount" },
+          status: { $first: "$status" },
+          items: { $push: "$items" },
+          totalItems: { $sum: 1 }
+        }
+      }
+    ]);
 
-    if (!cart) {
+    if (!carts || carts.length === 0) {
       return res.status(200).json({
         items: [],
         total: 0,
@@ -55,17 +86,15 @@ const getCart = async (req, res) => {
       });
     }
 
-    const skip = (page - 1) * limit;
-    const paginatedItems = cart.items.slice(skip, skip + limit);
+    const cart = carts[0];
 
     res.status(200).json({
-      items: paginatedItems,
-      total: cart.items.length,
+      items: cart.items,
+      total: cart.totalItems,
       page,
-      pages: Math.ceil(cart.items.length / limit),
+      pages: Math.ceil(cart.totalItems / limit),
     });
   } catch (error) {
-    console.error("Get cart error:", error.message);
     res.status(500).json({ error: "Failed to fetch cart", status: 500 });
   }
 };

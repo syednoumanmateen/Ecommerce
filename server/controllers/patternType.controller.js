@@ -27,7 +27,17 @@ const addPatternType = async (req, res) => {
 // Get all
 const getPatternTypes = async (req, res) => {
   try {
-    const patternTypes = await PatternType.find();
+    const patternTypes = await PatternType.aggregate([
+      {
+        $project: {
+          _id: 1,
+          name: 1,
+          description: 1,
+          createdAt: 1,
+          updatedAt: 1
+        }
+      }
+    ]);
 
     res.status(200).json({
       data: patternTypes,
@@ -35,7 +45,6 @@ const getPatternTypes = async (req, res) => {
       status: 200,
     });
   } catch (error) {
-    console.error("Get PatternTypes error:", error.message);
     res.status(500).json({
       error: "Internal server error",
       message: error.message,
@@ -44,15 +53,29 @@ const getPatternTypes = async (req, res) => {
   }
 };
 
+
 // Get single
 const getPatternType = async (req, res) => {
   try {
     const { id } = req.params;
-    if (!isValidObjectId(id)) {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
       return res.status(400).json({ error: "Invalid ID", status: 400 });
     }
 
-    const patternType = await PatternType.findById(id);
+    const [patternType] = await PatternType.aggregate([
+      { $match: { _id: new mongoose.Types.ObjectId(id) } },
+      {
+        $project: {
+          _id: 1,
+          name: 1,
+          description: 1,
+          createdAt: 1,
+          updatedAt: 1
+        }
+      },
+      { $limit: 1 }
+    ]);
+
     if (!patternType) {
       return res.status(404).json({ error: "Pattern Type not found", status: 404 });
     }
@@ -63,7 +86,6 @@ const getPatternType = async (req, res) => {
       status: 200,
     });
   } catch (error) {
-    console.error("Get PatternType error:", error.message);
     res.status(500).json({
       error: "Internal server error",
       message: error.message,
@@ -71,6 +93,7 @@ const getPatternType = async (req, res) => {
     });
   }
 };
+
 
 // Update
 const updatePatternType = async (req, res) => {

@@ -6,20 +6,33 @@ import {
   updateProduct,
   deleteProduct,
 } from "../api/api";
-import { useLoading } from "../hooks/LoadingContext";
+import { useLoading } from "../context/LoadingContext";
+import { useSelector } from "react-redux";
 
-export const useProducts = (filters = {}) => {
+export const useProducts = () => {
+  const { filters, search, pagination } = useSelector(state => state.product);
   const { setLoading } = useLoading();
+
   return useQuery({
-    queryKey: ["product", filters],
+    queryKey: ["products", { search, filters, pagination }],
     queryFn: async () => {
-      setLoading(true);;
+      setLoading(true);
       try {
-        return await getProducts(filters);
+        return await getProducts({
+          params: {
+            search,
+            ...filters,
+            page: pagination.page,
+            perPage: pagination.perPage,
+          },
+        });
       } finally {
         setLoading(false);
       }
     },
+    keepPreviousData: true,
+    staleTime: 1000 * 60,
+    refetchOnWindowFocus: false,
   });
 };
 

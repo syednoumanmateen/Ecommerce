@@ -1,6 +1,6 @@
 const express = require("express");
 const { addProduct, getProducts, getProduct, updateProduct, deleteProduct } = require("../controllers/product.controller");
-const protect = require("../middleware")
+const { protect } = require("../middleware")
 const router = express.Router();
 
 router.post("/", protect, addProduct);

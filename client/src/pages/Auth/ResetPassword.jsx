@@ -83,7 +83,7 @@ const ResetPassword = () => {
           </div>
 
           <Button type="submit" className="py-2 px-5" disabled={isLoading}>
-            {isLoading ? "Resetting..." : "Reset Password"}
+            Reset Password
           </Button>
         </form>
       </CardBody>

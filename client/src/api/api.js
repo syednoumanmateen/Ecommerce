@@ -1,57 +1,52 @@
 import api from "../utils/axios";
 
-// Users
+// 🔓 Unauthenticated
 export const registerUser = (data) => api.post("/user/register", data);
 export const loginUser = (data) => api.post("/user/login", data);
-export const getUserProfile = () => api.get("/user/profile");
-export const updateUserProfile = (data) => api.put("/user/profile", data);
-
 export const forgotPassword = (data) => api.post("/user/forgot-password", data);
 export const resetPassword = (data) => api.post("/user/reset-password", data);
+export const verifyToken = (token) => api.post("/user/verify", { token });
 
-// Products
-export const addProduct = (data) => api.post("/product", data);
-export const getProducts = (params) => api.get("/product", { params });
-export const getProductById = (id) => api.get(`/product/${id}`);
-export const updateProduct = (id, data) => api.put(`/product/${id}`, data);
-export const deleteProduct = (id) => api.delete(`/product/${id}`);
+// 🔐 Authenticated
+export const getUserProfile = () => api.get("/user/profile", { auth: true });
+export const updateUserProfile = (data) => api.put("/user/profile", data, { auth: true });
 
-// Categories
-export const addCategory = (data) => api.post("/category", data);
-export const getCategories = () => api.get("/category");
-export const getCategoryById = (id) => api.get(`/category/${id}`);
-export const updateCategory = (id, data) => api.put(`/category/${id}`, data);
-export const deleteCategory = (id) => api.delete(`/category/${id}`);
+export const addProduct = (data) => api.post("/product", data, { auth: true });
+export const getProducts = (data) => api.get("/product", { ...data, auth: true });
+export const getProductById = (id) => api.get(`/product/${id}`, { auth: true });
+export const updateProduct = (id, data) => api.put(`/product/${id}`, data, { auth: true });
+export const deleteProduct = (id) => api.delete(`/product/${id}`, { auth: true });
 
-// Shop By Room
-export const addShopRoom = (data) => api.post("/shopRoom", data);
-export const getShopRooms = () => api.get("/shopRoom");
-export const getShopRoomById = (id) => api.get(`/shopRoom/${id}`);
-export const updateShopRoom = (id, data) => api.put(`/shopRoom/${id}`, data);
-export const deleteShopRoom = (id) => api.delete(`/shopRoom/${id}`);
+export const addCategory = (data) => api.post("/category", data, { auth: true });
+export const getCategories = () => api.get("/category", { auth: true });
+export const getCategoryById = (id) => api.get(`/category/${id}`, { auth: true });
+export const updateCategory = (id, data) => api.put(`/category/${id}`, data, { auth: true });
+export const deleteCategory = (id) => api.delete(`/category/${id}`, { auth: true });
 
-// Brand
-export const addBrand = (data) => api.post("/brand", data);
-export const getBrands = () => api.get("/brand");
-export const getBrandById = (id) => api.get(`/brand/${id}`);
-export const updateBrand = (id, data) => api.put(`/brand/${id}`, data);
-export const deleteBrand = (id) => api.delete(`/brand/${id}`);
+export const addShopRoom = (data) => api.post("/shop-room", data, { auth: true });
+export const getShopRooms = () => api.get("/shop-room", { auth: true });
+export const getShopRoomById = (id) => api.get(`/shop-room/${id}`, { auth: true });
+export const updateShopRoom = (id, data) => api.put(`/shop-room/${id}`, data, { auth: true });
+export const deleteShopRoom = (id) => api.delete(`/shop-room/${id}`, { auth: true });
 
-// Pattern Type
-export const addPatternType = (data) => api.post("/pattern-type", data);
-export const getPatternTypes = () => api.get("/pattern-type");
-export const getPatternTypeById = (id) => api.get(`/pattern-type/${id}`);
-export const updatePatternType = (id, data) => api.put(`/pattern-type/${id}`, data);
-export const deletePatternType = (id) => api.delete(`/pattern-type/${id}`);
+export const addBrand = (data) => api.post("/brand", data, { auth: true });
+export const getBrands = () => api.get("/brand", { auth: true });
+export const getBrandById = (id) => api.get(`/brand/${id}`, { auth: true });
+export const updateBrand = (id, data) => api.put(`/brand/${id}`, data, { auth: true });
+export const deleteBrand = (id) => api.delete(`/brand/${id}`, { auth: true });
 
-// Cart
-export const addCart = (data) => api.post("/cart", data);
-export const getCart = (userId, params) => api.get(`/cart/${userId}`, { params });
-export const updateCart = (userId, items) => api.put(`/cart/${userId}`, { items });
-export const deleteCart = (userId) => api.delete(`/cart/${userId}`);
+export const addPatternType = (data) => api.post("/pattern-type", data, { auth: true });
+export const getPatternTypes = () => api.get("/pattern-type", { auth: true });
+export const getPatternTypeById = (id) => api.get(`/pattern-type/${id}`, { auth: true });
+export const updatePatternType = (id, data) => api.put(`/pattern-type/${id}`, data, { auth: true });
+export const deletePatternType = (id) => api.delete(`/pattern-type/${id}`, { auth: true });
 
-// Wishlist
-export const getWishlist = (userId) => api.get(`/whishlist/${userId}`);
-export const addToWishlist = (data) => api.post("/whishlist", data);
-export const removeFromWishlist = (data) => api.delete("/whishlist", { data });
-export const clearWishlist = (userId) => api.delete(`/whishlist/${userId}`);
+export const addCart = (data) => api.post("/cart", data, { auth: true });
+export const getCart = (userId, params) => api.get(`/cart/${userId}`, { params, auth: true });
+export const updateCart = (userId, items) => api.put(`/cart/${userId}`, items, { auth: true });
+export const deleteCart = (userId) => api.delete(`/cart/${userId}`, { auth: true });
+
+export const getWishlist = (userId) => api.get(`/whishlist/${userId}`, { auth: true });
+export const addToWishlist = (data) => api.post("/whishlist", data, { auth: true });
+export const removeFromWishlist = (data) => api.delete("/whishlist", { data, auth: true });
+export const clearWishlist = (userId) => api.delete(`/whishlist/${userId}`, { auth: true });

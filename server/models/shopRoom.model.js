@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const shopByRoomSchema = new mongoose.Schema({
+const ShopRoomSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
@@ -34,5 +34,5 @@ const shopByRoomSchema = new mongoose.Schema({
   ],
 }, { timestamps: true });
 
-const ShopByRoom = mongoose.model("ShopByRoom", shopByRoomSchema);
-module.exports = ShopByRoom;
+const ShopRoom = mongoose.model("ShopRoom", ShopRoomSchema);
+module.exports = ShopRoom;

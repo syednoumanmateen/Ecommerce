@@ -10,6 +10,9 @@ import { CiHeart } from "react-icons/ci";
 import { IoBagOutline } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 import DropDown from "./UI/DropDown";
+import { useDispatch } from "react-redux";
+import { useState } from "react";
+import { setSearch } from "../store/slices/productSlice";
 
 const navItems = [
   { label: "Products", icon: <MdOutlineChair />, path: "/products" },
@@ -27,7 +30,16 @@ const cartIcons = [
 const iconClass = "text-lg text-gray-500";
 
 const Navbar = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [searchTerm, setSearchTerm] = useState  ("");
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    dispatch(setSearch(searchTerm));
+    navigate("/products");
+  };
+
   return (
     <div className="grid grid-cols-12 gap-2 items-center py-2 px-4">
       <div className="col-span-1 flex items-center pointer" onClick={() => navigate("/")}>
@@ -49,10 +61,14 @@ const Navbar = () => {
       </div>
 
       <div className="col-span-3">
-        <TextInputIcon
-          placeholder="Search for products"
-          iconEnd={<IoMdSearch className={iconClass} />}
-        />
+        <form onSubmit={handleSearch}>
+          <TextInputIcon
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            placeholder="Search for products"
+            iconEnd={<IoMdSearch className={iconClass} />}
+          />
+        </form>
       </div>
 
       <div className="col-span-3">

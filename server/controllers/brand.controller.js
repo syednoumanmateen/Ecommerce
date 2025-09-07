@@ -28,7 +28,15 @@ const addBrand = async (req, res) => {
 // Get all brands
 const getBrands = async (req, res) => {
   try {
-    const brands = await Brand.find();
+    const brands = await Brand.aggregate([
+      {
+        $project: {
+          _id: 1,
+          name: 1,
+          description: 1
+        }
+      }
+    ]);
 
     res.status(200).json({
       data: brands,
@@ -53,9 +61,19 @@ const getBrand = async (req, res) => {
       return res.status(400).json({ error: "Invalid brand ID", status: 400 });
     }
 
-    const brand = await Brand.findById(id);
+    const brand = await Brand.aggregate([{
+      $match: { _id: new mongoose.Types.ObjectId(id) }
+    },
+    {
+      $project: {
+        _id: 1,
+        name: 1,
+        description: 1
+      }
+    }, { $limit: 1 }
+    ]);
 
-    if (!brand) {
+    if (!brand && brand.length) {
       return res.status(404).json({ error: "Brand not found", status: 404 });
     }
 

@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 const User = require("../models/user.model");
+const { decodeToken } = require("../middleware");
 
 const sanitizeUser = (user) => {
   const { password, resetPasswordToken, resetPasswordExpires, ...rest } = user.toObject();
@@ -91,10 +92,8 @@ const resetPassword = async (req, res) => {
   try {
     const { token, newPassword } = req.body;
 
-    const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
-
     const user = await User.findOne({
-      resetPasswordToken: hashedToken,
+      resetPasswordToken: token,
       resetPasswordExpires: { $gt: Date.now() },
     });
 
@@ -152,6 +151,27 @@ const updateProfile = async (req, res) => {
   }
 };
 
+// Verify token
+const verifyToken = async (req, res) => {
+  const errorResponse = { message: "Invalid or expired token", valid: false };
+
+  try {
+    const decoded = await decodeToken(req.body.token);
+
+    if (!decoded) {
+      return res.status(400).json(errorResponse);
+    }
+
+    return res.status(200).json({
+      message: "Verified successfully",
+      valid: true,
+      status: 200,
+    });
+  } catch (err) {
+    return res.status(500).json(errorResponse);
+  }
+};
+
 module.exports = {
   register,
   login,
@@ -159,4 +179,5 @@ module.exports = {
   resetPassword,
   getProfile,
   updateProfile,
+  verifyToken
 };

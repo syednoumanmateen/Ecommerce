@@ -17,6 +17,7 @@ const Rating = ({ options, name, selected, onChange }) => {
               checked={Number(selected) === value}
               onChange={() => onChange(value)}
               className="text-primary w-4 h-4"
+              style={{ accentColor: "var(--primary)" }}
             />
             <span className="text-primary text-lg font-sans">{starDisplay}</span>
           </label>

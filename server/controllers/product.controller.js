@@ -27,33 +27,167 @@ const addProduct = async (req, res) => {
 // Get all Products
 const getProducts = async (req, res) => {
   try {
-    const products = await Product.find();
+    const {
+      search,
+      category,
+      brand,
+      price,
+      patternType,
+      rating,
+      shopRoom,
+      page = 1,
+      perPage = 10
+    } = req.query;
+
+    const match = {};
+
+    if (search) match.name = { $regex: search, $options: "i" };
+    if (price) {
+      const [minStr, maxStr] = price.split("-");
+
+      const minPrice = minStr !== "null" ? Number(minStr) : null;
+      const maxPrice = maxStr !== "null" ? Number(maxStr) : null;
+
+      if (minPrice !== null || maxPrice !== null) {
+        match.price = {};
+        if (minPrice !== null) match.price.$gte = minPrice;
+        if (maxPrice !== null) match.price.$lte = maxPrice;
+      }
+    }
+    if (brand && mongoose.Types.ObjectId.isValid(brand)) match.brand = new mongoose.Types.ObjectId(brand);
+    if (category && mongoose.Types.ObjectId.isValid(category)) match.category = new mongoose.Types.ObjectId(category);
+    if (patternType && mongoose.Types.ObjectId.isValid(patternType)) match.patternType = new mongoose.Types.ObjectId(patternType);
+    if (rating) match.rating = { $eq: Number(rating) };
+    if (shopRoom && mongoose.Types.ObjectId.isValid(shopRoom)) match.shopRoom = new mongoose.Types.ObjectId(shopRoom);
+
+    const skip = (Number(page) - 1) * Number(perPage);
+    const limit = Number(perPage);
+
+    const products = await Product.aggregate([
+      { $match: match },
+      { $sort: { createdAt: -1 } },
+      { $skip: skip },
+      { $limit: limit },
+      {
+        $lookup: { from: "categories", localField: "category", foreignField: "_id", as: "category" }
+      },
+      { $unwind: { path: "$category", preserveNullAndEmptyArrays: true } },
+      {
+        $lookup: { from: "brands", localField: "brand", foreignField: "_id", as: "brand" }
+      },
+      { $unwind: { path: "$brand", preserveNullAndEmptyArrays: true } },
+      {
+        $lookup: { from: "patterntypes", localField: "patternType", foreignField: "_id", as: "patternType" }
+      },
+      { $unwind: { path: "$patternType", preserveNullAndEmptyArrays: true } },
+      {
+        $lookup: { from: "shoprooms", localField: "shopRoom", foreignField: "_id", as: "shopRoom" }
+      },
+      { $unwind: { path: "$shopRoom", preserveNullAndEmptyArrays: true } },
+      {
+        $project: {
+          name: 1,
+          description: 1,
+          price: 1,
+          stock: 1,
+          images: 1,
+          featured: 1,
+          rating: 1,
+          category: { _id: "$category._id", name: "$category.name" },
+          brand: { _id: "$brand._id", name: "$brand.name" },
+          patternType: { _id: "$patternType._id", name: "$patternType.name" },
+          shopRoom: { _id: "$shopRoom._id", name: "$shopRoom.name" },
+          createdAt: 1,
+          updatedAt: 1
+        }
+      }
+    ]);
+
+    const totalCount = await Product.countDocuments(match);
 
     res.status(200).json({
       data: products,
-      message: "Products fetched successfully",
-      status: 200,
+      total: totalCount,
+      page: Number(page),
+      pages: Math.ceil(totalCount / limit),
     });
   } catch (error) {
-    console.error("Get Products error:", error.message);
     res.status(500).json({
-      error: "Internal server error",
+      error: "Failed to fetch products",
       message: error.message,
       status: 500,
     });
   }
 };
 
+
+
 // Get single Product
 const getProduct = async (req, res) => {
   try {
     const { id } = req.params;
 
-    if (!isValidObjectId(id)) {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
       return res.status(400).json({ error: "Invalid product ID", status: 400 });
     }
 
-    const product = await Product.findById(id);
+    const [product] = await Product.aggregate([
+      { $match: { _id: new mongoose.Types.ObjectId(id) } },
+      {
+        $lookup: {
+          from: "categories",
+          localField: "category",
+          foreignField: "_id",
+          as: "category"
+        }
+      },
+      { $unwind: { path: "$category", preserveNullAndEmptyArrays: true } },
+      {
+        $lookup: {
+          from: "brands",
+          localField: "brand",
+          foreignField: "_id",
+          as: "brand"
+        }
+      },
+      { $unwind: { path: "$brand", preserveNullAndEmptyArrays: true } },
+      {
+        $lookup: {
+          from: "patterntypes",
+          localField: "patternType",
+          foreignField: "_id",
+          as: "patternType"
+        }
+      },
+      { $unwind: { path: "$patternType", preserveNullAndEmptyArrays: true } },
+      {
+        $lookup: {
+          from: "shoprooms",
+          localField: "shopRoom",
+          foreignField: "_id",
+          as: "shopRoom"
+        }
+      },
+      { $unwind: { path: "$shopRoom", preserveNullAndEmptyArrays: true } },
+      {
+        $project: {
+          name: 1,
+          description: 1,
+          price: 1,
+          stock: 1,
+          images: 1,
+          featured: 1,
+          rating: 1,
+          category: { _id: "$category._id", name: "$category.name" },
+          brand: { _id: "$brand._id", name: "$brand.name" },
+          patternType: { _id: "$patternType._id", name: "$patternType.name" },
+          shopRoom: { _id: "$shopRoom._id", name: "$shopRoom.name" },
+          createdAt: 1,
+          updatedAt: 1
+        }
+      },
+      { $limit: 1 }
+    ]);
 
     if (!product) {
       return res.status(404).json({ error: "Product not found", status: 404 });
@@ -65,7 +199,6 @@ const getProduct = async (req, res) => {
       status: 200,
     });
   } catch (error) {
-    console.error("Get Product error:", error.message);
     res.status(500).json({
       error: "Internal server error",
       message: error.message,
@@ -73,6 +206,7 @@ const getProduct = async (req, res) => {
     });
   }
 };
+
 
 // Update Product
 const updateProduct = async (req, res) => {

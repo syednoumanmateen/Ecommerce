@@ -1,6 +1,6 @@
 const express = require("express");
 const { addCategory, getCategories, getCategory, updateCategory, deleteCategory } = require("../controllers/category.controller");
-const protect = require("../middleware")
+const { protect } = require("../middleware")
 const router = express.Router();
 
 router.post("/", protect, addCategory);

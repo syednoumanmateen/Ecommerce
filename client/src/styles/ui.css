@@ -1,57 +1,70 @@
 .color-red {
-    color: red;
+  color: red;
 }
 
 input {
-    padding: 10px;
-    border: 1px solid var(--color-secondary);
-    color: var(--color-secondary);
-    border-radius: 25px;
-    box-sizing: border-box;
+  padding: 10px;
+  border: 1px solid var(--color-secondary);
+  color: var(--color-secondary);
+  border-radius: 25px;
+  box-sizing: border-box;
+  outline: none;
+  transition: border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
 }
 
-input:focus,
-input:active,
-input:hover {
-    outline: none;
-    border: 1px solid var(--color-secondary);
-    color: var(--color-secondary);
-    transition: none;
+input:hover,
+input:focus {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+input:focus {
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
+}
+
+.button,
+.button-round {
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.2s ease, border 0.2s ease, color 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .button {
-  cursor: pointer;
   color: var(--color-light);
-  font-weight: 600;
   background-color: var(--primary);
   border-radius: 25px;
   width: max-content;
+  border: 1px solid transparent;
 }
 
-.button:hover {
-  background-color: var(--background-primary);
+.button:hover,
+.button:active {
+  background-color: var(--primary);
   border: 1px solid var(--primary);
-  color: var(--primary);
-  transition: none;
+  color: var(--color-light);
 }
 
 .button-round {
-  cursor: pointer;
-  color: var(--color-light);
-  font-weight: 600;
-  background-color: var(--color);
+  color: var(--primary);
+  background-color: var(--color-light);
+  border: 1px solid var(--primary);
   border-radius: 50%;
   width: max-content;
+  height: max-content;
 }
 
-.button-round:hover {
-  background-color: var(--color);
-  border: 1px solid var(--color-light);
-  transition: none;
-}
-
+.button-round:hover,
 .button-round:active {
+  color: var(--color-light);
+  background-color: var(--primary);
+  border-color: var(--primary);
+}
+
+.button-round-active {
+  color: var(--color-light);
   background-color: var(--primary);
   border: 1px solid var(--primary);
-  transition: none;
 }

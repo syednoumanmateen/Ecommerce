@@ -25,9 +25,9 @@ const productSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Category",
   },
-  shopByRoom: {
+  shopRoom: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "ShopByRoom",
+    ref: "ShopRoom",
   },
   brand: {
     type: mongoose.Schema.Types.ObjectId,
