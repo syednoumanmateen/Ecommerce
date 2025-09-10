@@ -8,106 +8,55 @@ import {
   resetPassword,
   verifyToken,
 } from "../api/api";
-import { useLoading } from "../context/LoadingContext";
-import { useCallback } from "react";
 
 export const useRegister = () => {
-  const { setLoading } = useLoading();
+
   return useMutation({
-    mutationFn: async (data) => {
-      setLoading(true);;
-      try {
-        return await registerUser(data);
-      } finally {
-        setLoading(false);
-      }
-    },
+    mutationFn: (data) => registerUser(data)
   });
 };
 
 export const useLogin = () => {
-  const { setLoading } = useLoading();
+
   return useMutation({
-    mutationFn: async (data) => {
-      setLoading(true);;
-      try {
-        return await loginUser(data);
-      } finally {
-        setLoading(false);
-      }
-    },
+    mutationFn: (data) => loginUser(data)
   });
 };
 
 export const useForgotPassword = () => {
-  const { setLoading } = useLoading();
+
   return useMutation({
-    mutationFn: async (data) => {
-      setLoading(true);;
-      try {
-        return await forgotPassword(data);
-      } finally {
-        setLoading(false);
-      }
-    },
+    mutationFn: (data) => forgotPassword(data)
   });
 };
 
 export const useResetPassword = () => {
-  const { setLoading } = useLoading();
+
   return useMutation({
-    mutationFn: async (data) => {
-      setLoading(true);;
-      try {
-        return await resetPassword(data);
-      } finally {
-        setLoading(false);
-      }
-    },
+    mutationFn: (data) => resetPassword(data)
   });
 };
 
 export const useUserProfile = () => {
-  const { setLoading } = useLoading();
+
   return useQuery({
     queryKey: ["user"],
-    queryFn: async () => {
-      setLoading(true);;
-      try {
-        return await getUserProfile();
-      } finally {
-        setLoading(false);
-      }
-    },
+    queryFn: () => getUserProfile()
   });
 };
 
 export const useUpdateUserProfile = () => {
   const queryClient = useQueryClient();
-  const { setLoading } = useLoading();
+
   return useMutation({
-    mutationFn: async (data) => {
-      setLoading(true);;
-      try {
-        return await updateUserProfile(data);
-      } finally {
-        setLoading(false);
-      }
-    },
+    mutationFn: (data) => updateUserProfile(data),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["user"] }),
   });
 };
 
 export const useVerifyToken = () => {
-  const { setLoading } = useLoading();
+
   return useMutation({
-    mutationFn: async (token) => {
-      setLoading(true);
-      try {
-        return await verifyToken(token);
-      } finally {
-        setLoading(false);
-      }
-    }
+    mutationFn: (token) => verifyToken(token)
   });
 };

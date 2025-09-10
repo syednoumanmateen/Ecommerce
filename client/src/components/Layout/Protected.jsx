@@ -1,38 +1,54 @@
-import { useEffect } from "react";
-import { Navigate, Outlet, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Outlet, useNavigate } from "react-router-dom";
 import { useUser } from "../../context/UserContext";
 import { useVerifyToken } from "../../api/userApiHooks";
 import CardBody from "../CardBody";
 import Navbar from "../Navbar";
 import Footer from "../Footer";
+import Loader from "../loading/Loader";
 
-const ProtectedCard = () => {
-  const { userData, setUser, clearUser } = useUser();
+const Protected = () => {
+  const { userData, clearUser } = useUser();
   const token = userData?.token;
   const { mutateAsync } = useVerifyToken();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+
+  const [checking, setChecking] = useState(true);
 
   useEffect(() => {
     const checkToken = async () => {
+      const token = userData?.token;
+
       if (!token) {
-        navigate("/login", { replace: true });
+        redirectToLogin();
         return;
       }
 
       try {
         const data = await mutateAsync(token);
         if (!data?.data?.valid) {
-          clearUser();
-          navigate("/login", { replace: true });
+          redirectToLogin();
+        } else {
+          setChecking(false);
         }
       } catch {
-        clearUser();
-        navigate("/login", { replace: true });
+        redirectToLogin();
       }
     };
 
+    const redirectToLogin = () => {
+      clearUser();
+      navigate("/login", { replace: true });
+    };
+
     checkToken();
-  }, [token, mutateAsync, clearUser, navigate]);
+  }, []);
+
+  if (checking) {
+    return <div className="text-center p-4">
+      <Loader />
+    </div>;
+  }
 
   return (
     <div className="grid grid-rows-[auto_1fr] grid-cols-[250px_1fr] gap-2">
@@ -52,4 +68,4 @@ const ProtectedCard = () => {
   );
 };
 
-export default ProtectedCard;
+export default Protected;

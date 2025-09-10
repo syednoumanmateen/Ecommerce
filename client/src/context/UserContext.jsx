@@ -27,12 +27,11 @@ export const UserProvider = ({ children }) => {
 
   useEffect(() => {
     const data = localStorage.getItem("user");
-    if (data) {
-      try {
-        dispatch({ type: ACTIONS.SET_USER, payload: JSON.parse(data) });
-      } catch {
-        dispatch({ type: ACTIONS.CLEAR_USER });
-      }
+    if (!data) return
+    try {
+      dispatch({ type: ACTIONS.SET_USER, payload: JSON.parse(data) });
+    } catch {
+      dispatch({ type: ACTIONS.CLEAR_USER });
     }
   }, []);
 

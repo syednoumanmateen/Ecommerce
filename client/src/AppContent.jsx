@@ -2,7 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import { Suspense, lazy } from "react";
 import "./App.css";
 import Loader from "./components/loading/Loader";
-import { useLoading } from "./context/LoadingContext";
+import GlobalLoader from "./components/loading/GlobalLoader";
 
 // Layouts
 const UnProtected = lazy(() => import("./components/Layout/UnProtected"));
@@ -33,62 +33,62 @@ const RoomByAdd = lazy(() => import("./pages/RoomBy/Add"));
 const RoomByList = lazy(() => import("./pages/RoomBy/List"));
 
 const Cart = lazy(() => import("./pages/Cart"));
-const Whishlist = lazy(() => import("./pages/Whishlist"));
+const Wishlist = lazy(() => import("./pages/Wishlist"));
 const Profile = lazy(() => import("./pages/Profile"));
 
 const AppContent = () => {
-    // const { isLoading } = useLoading();
-
-    // if (isLoading) return <Loader />;
 
     return (
-        <Suspense fallback={<Loader />}>
-            <Routes>
-                {/* Unprotected Routes */}
-                <Route element={<UnProtected />}>
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/register" element={<Register />} />
-                    <Route path="/forgot-password" element={<ForgotPassword />} />
-                    <Route path="/reset-password" element={<ResetPassword />} />
-                    <Route path="*" element={<NotFound />} />
-                </Route>
+        <>
+            <GlobalLoader />
+            <Suspense fallback={<Loader />}>
+                <Routes>
+                    {/* Unprotected Routes */}
+                    <Route element={<UnProtected />}>
+                        <Route path="/login" element={<Login />} />
+                        <Route path="/register" element={<Register />} />
+                        <Route path="/forgot-password" element={<ForgotPassword />} />
+                        <Route path="/reset-password" element={<ResetPassword />} />
+                        <Route path="*" element={<NotFound />} />
+                    </Route>
 
-                {/* Protected Routes */}
-                <Route element={<Protected />}>
-                    <Route path="/" element={<Home />} />
+                    {/* Protected Routes */}
+                    <Route element={<Protected />}>
+                        <Route path="/" element={<Home />} />
 
-                    {/* Brand */}
-                    <Route path="/brand/add" element={<BrandAdd />} />
-                    <Route path="/brands" element={<BrandList />} />
+                        {/* Brand */}
+                        <Route path="/brand/add" element={<BrandAdd />} />
+                        <Route path="/brands" element={<BrandList />} />
 
-                    {/* Category */}
-                    <Route path="/category/add" element={<CategoryAdd />} />
-                    <Route path="/categories" element={<CategoryList />} />
+                        {/* Category */}
+                        <Route path="/category/add" element={<CategoryAdd />} />
+                        <Route path="/categories" element={<CategoryList />} />
 
-                    {/* Product */}
-                    <Route path="/product/add" element={<ProductAdd />} />
-                    <Route path="/products" element={<ProductList />} />
-                    <Route path="/product/details/:id" element={<ProductDetails />} />
+                        {/* Product */}
+                        <Route path="/product/add" element={<ProductAdd />} />
+                        <Route path="/products" element={<ProductList />} />
+                        <Route path="/product/details/:id" element={<ProductDetails />} />
 
-                    {/* Pattern Type */}
-                    <Route path="/pattern/add" element={<PatternTypeAdd />} />
-                    <Route path="/patterns" element={<PatternTypeList />} />
+                        {/* Pattern Type */}
+                        <Route path="/pattern/add" element={<PatternTypeAdd />} />
+                        <Route path="/patterns" element={<PatternTypeList />} />
 
-                    {/* Room By */}
-                    <Route path="/room/add" element={<RoomByAdd />} />
-                    <Route path="/rooms" element={<RoomByList />} />
+                        {/* Room By */}
+                        <Route path="/room/add" element={<RoomByAdd />} />
+                        <Route path="/rooms" element={<RoomByList />} />
 
-                    {/* Cart */}
-                    <Route path="/cart" element={<Cart />} />
+                        {/* Cart */}
+                        <Route path="/cart" element={<Cart />} />
 
-                    {/* Wishlist */}
-                    <Route path="/wishlist" element={<Whishlist />} />
+                        {/* Wishlist */}
+                        <Route path="/wishlist" element={<Wishlist />} />
 
-                    {/* Profile */}
-                    <Route path="/profile" element={<Profile />} />
-                </Route>
-            </Routes>
-        </Suspense>
+                        {/* Profile */}
+                        <Route path="/profile" element={<Profile />} />
+                    </Route>
+                </Routes>
+            </Suspense>
+        </>
     );
 };
 

@@ -6,51 +6,28 @@ import {
   updateBrand,
   deleteBrand,
 } from "../api/api";
-import { useLoading } from "../context/LoadingContext";
 
 export const useBrands = (filters = {}) => {
-  const { setLoading } = useLoading(); 
   return useQuery({
-    queryKey: ["brand", filters],
-    queryFn: async () => {
-      setLoading(true);
-      try {
-        return await getBrands(filters);
-      } finally {
-        setLoading(false);
-      }
-    },
+    queryKey: ['brand', filters],
+    queryFn: () => getBrands(filters),
   });
 };
 
 export const useBrand = (id) => {
-  const { setLoading } = useLoading();
+
   return useQuery({
     queryKey: ["brand", id],
-    queryFn: async () => {
-      setLoading(true);;
-      try {
-        return await getBrandById(id);
-      } finally {
-        setLoading(false);
-      }
-    },
+    queryFn: () => getBrandById(id),
     enabled: !!id,
   });
 };
 
 export const useAddBrand = () => {
   const queryClient = useQueryClient();
-  const { setLoading } = useLoading();
+
   return useMutation({
-    mutationFn: async (data) => {
-      setLoading(true);;
-      try {
-        return await addBrand(data);
-      } finally {
-        setLoading(false);
-      }
-    },
+    mutationFn: (data) => addBrand(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["brand"] });
     },
@@ -59,16 +36,9 @@ export const useAddBrand = () => {
 
 export const useUpdateBrand = () => {
   const queryClient = useQueryClient();
-  const { setLoading } = useLoading();
+
   return useMutation({
-    mutationFn: async ({ id, data }) => {
-      setLoading(true);;
-      try {
-        return await updateBrand(id, data);
-      } finally {
-        setLoading(false);
-      }
-    },
+    mutationFn: ({ id, data }) => updateBrand(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["brand"] });
     },
@@ -77,16 +47,9 @@ export const useUpdateBrand = () => {
 
 export const useDeleteBrand = () => {
   const queryClient = useQueryClient();
-  const { setLoading } = useLoading();
+
   return useMutation({
-    mutationFn: async (id) => {
-      setLoading(true);;
-      try {
-        return await deleteBrand(id);
-      } finally {
-        setLoading(false);
-      }
-    },
+    mutationFn: (id) => deleteBrand(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["brand"] });
     },

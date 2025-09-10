@@ -36,16 +36,14 @@ const Login = () => {
             localStorage.removeItem("remember");
         }
 
-        await mutateAsync(data, {
-            onSuccess: (response) => {
-                toast.success("Logged in successfully!");
-                setUser(response?.data);
-                navigate("/");
-            },
-            onError: (err) => {
-                toast.error(err.response?.data?.message || "Login failed");
-            },
-        });
+        try {
+            const response = await mutateAsync(data);
+            toast.success("Logged in successfully!");
+            setUser(response?.data);
+            navigate("/");
+        } catch (err) {
+            toast.error(err.response?.data?.message || "Login failed");
+        }
     };
 
     return (

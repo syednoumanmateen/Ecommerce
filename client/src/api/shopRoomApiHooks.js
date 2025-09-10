@@ -6,51 +6,29 @@ import {
   updateShopRoom,
   deleteShopRoom,
 } from "../api/api";
-import { useLoading } from "../context/LoadingContext";
 
 export const useShopRooms = (filters = {}) => {
-  const { setLoading } = useLoading();
+
   return useQuery({
     queryKey: ["shoproom", filters],
-    queryFn: async () => {
-      setLoading(true);;
-      try {
-        return await getShopRooms(filters);
-      } finally {
-        setLoading(false);
-      }
-    },
+    queryFn: () => getShopRooms(filters)
   });
 };
 
 export const useShopRoom = (id) => {
-  const { setLoading } = useLoading();
+
   return useQuery({
     queryKey: ["shoproom", id],
-    queryFn: async () => {
-      setLoading(true);;
-      try {
-        return await getShopRoomById(id);
-      } finally {
-        setLoading(false);
-      }
-    },
+    queryFn: () => getShopRoomById(id),
     enabled: !!id,
   });
 };
 
 export const useAddShopRoom = () => {
   const queryClient = useQueryClient();
-  const { setLoading } = useLoading();
+
   return useMutation({
-    mutationFn: async (data) => {
-      setLoading(true);;
-      try {
-        return await addShopRoom(data);
-      } finally {
-        setLoading(false);
-      }
-    },
+    mutationFn: (data) => addShopRoom(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["shoproom"] });
     },
@@ -59,16 +37,9 @@ export const useAddShopRoom = () => {
 
 export const useUpdateShopRoom = () => {
   const queryClient = useQueryClient();
-  const { setLoading } = useLoading();
+
   return useMutation({
-    mutationFn: async ({ id, data }) => {
-      setLoading(true);;
-      try {
-        return await updateShopRoom(id, data);
-      } finally {
-        setLoading(false);
-      }
-    },
+    mutationFn: ({ id, data }) => updateShopRoom(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["shoproom"] });
     },
@@ -77,16 +48,9 @@ export const useUpdateShopRoom = () => {
 
 export const useDeleteShopRoom = () => {
   const queryClient = useQueryClient();
-  const { setLoading } = useLoading();
+
   return useMutation({
-    mutationFn: async (id) => {
-      setLoading(true);;
-      try {
-        return await deleteShopRoom(id);
-      } finally {
-        setLoading(false);
-      }
-    },
+    mutationFn: (id) => deleteShopRoom(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["shoproom"] });
     },

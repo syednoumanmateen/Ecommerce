@@ -3,8 +3,9 @@ import TextInputIcon from "./UI/TextInputIcon";
 import { IoMdSearch } from "react-icons/io";
 import { MdOutlineChair } from "react-icons/md";
 import { HiOutlineHomeModern } from "react-icons/hi2";
-import { GiInspiration } from "react-icons/gi";
-import { BiSolidOffer } from "react-icons/bi";
+import { TbBrandDeezer } from "react-icons/tb";
+import { BiCategory } from "react-icons/bi";
+import { GiGearStickPattern } from "react-icons/gi";
 import { CiUser } from "react-icons/ci";
 import { CiHeart } from "react-icons/ci";
 import { IoBagOutline } from "react-icons/io5";
@@ -17,8 +18,9 @@ import { setSearch } from "../store/slices/productSlice";
 const navItems = [
   { label: "Products", icon: <MdOutlineChair />, path: "/products" },
   { label: "Room", icon: <HiOutlineHomeModern />, path: "/rooms" },
-  { label: "Inspiration", icon: <GiInspiration />, path: "" },
-  { label: "Offer & Promotion", icon: <BiSolidOffer />, path: "" },
+  { label: "Category", icon: <BiCategory />, path: "/categories" },
+  { label: "Brand", icon: <TbBrandDeezer />, path: "/brands" },
+  { label: "Pattern", icon: <GiGearStickPattern />, path: "/patterns" },
 ];
 
 const cartIcons = [
@@ -32,7 +34,7 @@ const iconClass = "text-lg text-gray-500";
 const Navbar = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [searchTerm, setSearchTerm] = useState  ("");
+  const [searchTerm, setSearchTerm] = useState("");
 
   const handleSearch = (e) => {
     e.preventDefault();

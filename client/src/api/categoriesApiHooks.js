@@ -6,51 +6,29 @@ import {
   updateCategory,
   deleteCategory,
 } from "../api/api";
-import { useLoading } from "../context/LoadingContext";
 
 export const useCategories = (filters = {}) => {
-  const { setLoading } = useLoading();
+  
   return useQuery({
     queryKey: ["category", filters],
-    queryFn: async () => {
-      setLoading(true);;
-      try {
-        return await getCategories(filters);
-      } finally {
-        setLoading(false);
-      }
-    },
+    queryFn: () => getCategories(filters)
   });
 };
 
 export const useCategory = (id) => {
-  const { setLoading } = useLoading();
+  
   return useQuery({
     queryKey: ["category", id],
-    queryFn: async () => {
-      setLoading(true);;
-      try {
-        return await getCategoryById(id);
-      } finally {
-        setLoading(false);
-      }
-    },
+    queryFn: () => getCategoryById(id),
     enabled: !!id,
   });
 };
 
 export const useAddCategory = () => {
   const queryClient = useQueryClient();
-  const { setLoading } = useLoading();
+  
   return useMutation({
-    mutationFn: async (data) => {
-      setLoading(true);;
-      try {
-        return await addCategory(data);
-      } finally {
-        setLoading(false);
-      }
-    },
+    mutationFn: (data) => addCategory(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["category"] });
     },
@@ -59,16 +37,9 @@ export const useAddCategory = () => {
 
 export const useUpdateCategory = () => {
   const queryClient = useQueryClient();
-  const { setLoading } = useLoading();
+  
   return useMutation({
-    mutationFn: async ({ id, data }) => {
-      setLoading(true);;
-      try {
-        return await updateCategory(id, data);
-      } finally {
-        setLoading(false);
-      }
-    },
+    mutationFn: ({ id, data }) => updateCategory(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["category"] });
     },
@@ -77,16 +48,9 @@ export const useUpdateCategory = () => {
 
 export const useDeleteCategory = () => {
   const queryClient = useQueryClient();
-  const { setLoading } = useLoading();
+  
   return useMutation({
-    mutationFn: async (id) => {
-      setLoading(true);;
-      try {
-        return await deleteCategory(id);
-      } finally {
-        setLoading(false);
-      }
-    },
+    mutationFn: (id) => deleteCategory(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["category"] });
     },

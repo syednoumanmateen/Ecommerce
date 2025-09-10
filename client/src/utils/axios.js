@@ -13,7 +13,7 @@ api.interceptors.request.use(
       try {
         const user = JSON.parse(localStorage.getItem("user"));
         const token = user?.token;
-  
+
         if (token) {
           config.headers = {
             ...config.headers,
@@ -25,13 +25,14 @@ api.interceptors.request.use(
       }
     }
 
-    if (config.data?.auth) {
-      const { auth, ...rest } = config.data;
-      config.data = rest;
+    if (config.data && config.data.auth !== undefined) {
+      const { auth: _auth, ...cleanedData } = config.data;
+      config.data = cleanedData;
     }
-    if (config.params?.auth) {
-      const { auth, ...rest } = config.params;
-      config.params = rest;
+
+    if (config.params && config.params.auth !== undefined) {
+      const { auth: _auth, ...cleanedParams } = config.params;
+      config.params = cleanedParams;
     }
 
     return config;

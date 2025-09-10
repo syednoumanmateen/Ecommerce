@@ -6,51 +6,29 @@ import {
   updateWhishlist,
   deleteWhishlist,
 } from "../api/api";
-import { useLoading } from "../hooks/LoadingContext";
 
 export const useWhishlists = (filters = {}) => {
-  const { setLoading } = useLoading();
+
   return useQuery({
     queryKey: ["whishlist", filters],
-    queryFn: async () => {
-      setLoading(true);;
-      try {
-        return await getWhishlists(filters);
-      } finally {
-        setLoading(false);
-      }
-    },
+    queryFn: () => getWhishlists(filters)
   });
 };
 
 export const useWhishlist = (id) => {
-  const { setLoading } = useLoading();
+
   return useQuery({
     queryKey: ["whishlist", id],
-    queryFn: async () => {
-      setLoading(true);;
-      try {
-        return await getWhishlistById(id);
-      } finally {
-        setLoading(false);
-      }
-    },
+    queryFn: () => getWhishlistById(id),
     enabled: !!id,
   });
 };
 
 export const useAddWhishlist = () => {
   const queryClient = useQueryClient();
-  const { setLoading } = useLoading();
+
   return useMutation({
-    mutationFn: async (data) => {
-      setLoading(true);;
-      try {
-        return await addWhishlist(data);
-      } finally {
-        setLoading(false);
-      }
-    },
+    mutationFn: (data) => addWhishlist(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["whishlist"] });
     },
@@ -59,16 +37,9 @@ export const useAddWhishlist = () => {
 
 export const useUpdateWhishlist = () => {
   const queryClient = useQueryClient();
-  const { setLoading } = useLoading();
+
   return useMutation({
-    mutationFn: async ({ id, data }) => {
-      setLoading(true);;
-      try {
-        return await updateWhishlist(id, data);
-      } finally {
-        setLoading(false);
-      }
-    },
+    mutationFn: ({ id, data }) => updateWhishlist(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["whishlist"] });
     },
@@ -77,16 +48,9 @@ export const useUpdateWhishlist = () => {
 
 export const useDeleteWhishlist = () => {
   const queryClient = useQueryClient();
-  const { setLoading } = useLoading();
+
   return useMutation({
-    mutationFn: async (id) => {
-      setLoading(true);;
-      try {
-        return await deleteWhishlist(id);
-      } finally {
-        setLoading(false);
-      }
-    },
+    mutationFn: (id) => deleteWhishlist(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["whishlist"] });
     },
