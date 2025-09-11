@@ -60,12 +60,12 @@ const List = () => {
 
   return (
     <div className="flex flex-col md:flex-row h-full min-h-screen gap-2 p-2">
-      <aside className="w-full md:w-75 p-2 bg-white shadow overflow-y-auto scrollbar-hide">
+      <aside className="w-full md:w-75 p-2  overflow-y-auto scrollbar-hide">
         <ProductFilter />
       </aside>
 
       <main className="flex-1 flex flex-col">
-        <header className="p-2 mx-2 flex justify-between items-center bg-white shadow-sm">
+        <header className="p-2 mx-2 flex justify-between items-center">
           <h1 className="text-xl font-semibold">Product Listing</h1>
           <div className="flex space-x-2">
             {[
@@ -89,11 +89,11 @@ const List = () => {
               className={
                 view === "grid"
                   ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
-                  : "grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4"
+                  : "grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-4"
               }
             >
               {products.map((product) => (
-                <ProductCard key={product._id} product={product} view={view} />
+                <ProductCard key={product._id} product={product} view={view} context="product" />
               ))}
             </div>
           ) : (

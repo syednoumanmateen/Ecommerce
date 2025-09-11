@@ -35,7 +35,6 @@ const CustomSwiper = ({
             <img
               src={slide}
               alt={`slide-${i}`}
-              className="w-full h-full object-cover rounded-lg"
             />
           ) : (
             slide

@@ -14,7 +14,7 @@ export const useWishlist = (userId) => {
   });
 };
 
-export const useaddWishlist = () => {
+export const useAddWishlist = () => {
   const queryClient = useQueryClient();
 
   return useMutation({

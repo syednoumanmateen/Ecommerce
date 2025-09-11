@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Cart = require("../models/cart.model");
+const productPopulatePipeline = require("../helper");
 
 const addCart = async (req, res) => {
   try {
@@ -66,8 +67,11 @@ const getCart = async (req, res) => {
       {
         $lookup: {
           from: "products",
-          localField: "items.product",
-          foreignField: "_id",
+          let: { productId: "$items.product" },
+          pipeline: [
+            { $match: { $expr: { $eq: ["$_id", "$$productId"] } } },
+            ...productPopulatePipeline()
+          ],
           as: "items.productDetails"
         }
       },

@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Wishlist = require("../models/wishlist.model");
+const productPopulatePipeline = require("../helper");
 
 const getWishlist = async (req, res) => {
   try {
@@ -22,8 +23,11 @@ const getWishlist = async (req, res) => {
       {
         $lookup: {
           from: "products",
-          localField: "items.product",
-          foreignField: "_id",
+          let: { productId: "$items.product" },
+          pipeline: [
+            { $match: { $expr: { $eq: ["$_id", "$$productId"] } } },
+            ...productPopulatePipeline()
+          ],
           as: "items.productDetails"
         }
       },
