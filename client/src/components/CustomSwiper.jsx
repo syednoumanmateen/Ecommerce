@@ -1,4 +1,3 @@
-// CustomSwiper.jsx
 "use client";
 
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -9,7 +8,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 
 const CustomSwiper = ({
-  slides = [],             // can be JSX or strings
+  slides = [],
   navigation = false,
   pagination = false,
   autoplay = true,
@@ -17,6 +16,9 @@ const CustomSwiper = ({
   slidesPerView = 1,
   spaceBetween = 20,
   className = "",
+  imgWidth = "100%",
+  imgHeight = "200px",
+  objectFit = "cover",
 }) => {
   return (
     <Swiper
@@ -30,14 +32,26 @@ const CustomSwiper = ({
       className={`w-full ${className}`}
     >
       {slides.map((slide, i) => (
-        <SwiperSlide key={i}>
+        <SwiperSlide key={i} className="flex items-center justify-center">
           {typeof slide === "string" ? (
             <img
               src={slide}
               alt={`slide-${i}`}
+              style={{
+                width: imgWidth,
+                height: imgHeight,
+                objectFit: objectFit,
+              }}
             />
           ) : (
-            slide
+            <div
+              style={{
+                width: imgWidth,
+                height: imgHeight,
+              }}
+            >
+              {slide}
+            </div>
           )}
         </SwiperSlide>
       ))}

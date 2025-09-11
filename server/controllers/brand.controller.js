@@ -1,10 +1,8 @@
 const Brand = require("../models/brand.model");
 const mongoose = require("mongoose");
 
-// Helper: check for valid ObjectId
 const isValidObjectId = (_id) => mongoose.Types.ObjectId.isValid(_id);
 
-// Create brand
 const addBrand = async (req, res) => {
   try {
     const brand = new Brand(req.body);
@@ -25,7 +23,6 @@ const addBrand = async (req, res) => {
   }
 };
 
-// Get all brands
 const getBrands = async (req, res) => {
   try {
     const brands = await Brand.aggregate([
@@ -53,7 +50,6 @@ const getBrands = async (req, res) => {
   }
 };
 
-// Get single brand by _id
 const getBrand = async (req, res) => {
   try {
     const { _id } = req.params;
@@ -92,7 +88,6 @@ const getBrand = async (req, res) => {
   }
 };
 
-// Update brand
 const updateBrand = async (req, res) => {
   try {
     const { _id } = req.params;
@@ -124,7 +119,6 @@ const updateBrand = async (req, res) => {
   }
 };
 
-// Delete brand
 const deleteBrand = async (req, res) => {
   try {
     const { _id } = req.params;

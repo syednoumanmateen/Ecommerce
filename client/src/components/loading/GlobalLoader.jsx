@@ -12,7 +12,7 @@ const GlobalLoader = () => {
     let timer;
 
     if (isFetching > 0 || isMutating > 0) {
-      timer = setTimeout(() => setShowLoader(true), 200); // 200ms delay
+      timer = setTimeout(() => setShowLoader(true), 200);
     } else {
       clearTimeout(timer);
       setShowLoader(false);

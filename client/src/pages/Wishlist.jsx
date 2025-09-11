@@ -1,36 +1,42 @@
-import { useRemoveFromWishlist, useClearWishlist, useWishlist } from '../api/wishlistApiHooks';
+import { useDispatch } from 'react-redux';
+import { useWishlist } from '../api/wishlistApiHooks';
 import ProductCard from '../components/product/ProductCard';
 import { useUser } from '../context/UserContext';
+import { addWishlistItems } from '../store/slices/activeItemSlice';
+import { useEffect } from 'react';
 
 const Wishlist = () => {
   const { userData } = useUser();
   const userId = userData?.user._id;
+  const dispatch = useDispatch()
 
   const { data } = useWishlist(userId);
-  const removeFromWishlistMutation = useRemoveFromWishlist();
-  const clearWishlistMutation = useClearWishlist();
-
-  const handleClear = () => {
-    clearWishlistMutation.mutate(_id);
-  };
-
-  const handleRemove = (_id) => {
-    removeFromWishlistMutation.mutate(_id);
-  };
+  useEffect(() => {
+    if (data?.data?.items) {
+      dispatch(addWishlistItems(data?.data?.items?.map(i => i._id)));
+    }
+  }, [data, dispatch]);
 
   return (
-    <div className="my-5">
-      <h3 className="mb-4 text-center">Your Wishlist</h3>
+    <div className="flex flex-col md:flex-row h-full min-h-screen gap-2 p-2">
+      <main className="flex-1 flex flex-col">
+        <header className="p-2 mx-2 flex justify-between items-center">
+          <h1 className="text-xl font-semibold">Wishlist</h1>
+        </header>
 
-      {data?.data?.items?.length === 0 ? (
-        <div className="alert alert-info text-center">Your wishlist is empty</div>
-      ) : (
-        <div className="row g-4">
-          {data?.data?.items?.map(({ product }) => (
-             <ProductCard key={product._id} product={product} view={"list"} context="wishlist"/>
-          ))}
-        </div>
-      )}
+        <section className="flex-1 overflow-y-auto scrollbar-hide p-2">
+          {data?.data?.items?.length > 0 ? (
+            <div
+              className="grid grid-cols-1 gap-4"            >
+              {data?.data?.items?.map((product) => (
+                <ProductCard key={product._id} product={product} view={'list'} context="wishlist" />
+              ))}
+            </div>
+          ) : (
+            <p className="text-gray-500 text-center mt-10">No products found.</p>
+          )}
+        </section>
+      </main>
     </div>
   );
 }

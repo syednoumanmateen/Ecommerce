@@ -21,7 +21,6 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Define a simple route
 app.get('/', (req, res) => {
     res.send('Welcome to the Ecommerce API');
 });
@@ -35,7 +34,6 @@ app.use('/api/product', productRoute);
 app.use('/api/shop-room', shopRoomRoute);
 app.use('/api/wishlist', whishlistRoute);
 
-// Start the server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);

@@ -69,8 +69,8 @@ const List = () => {
           <h1 className="text-xl font-semibold">Product Listing</h1>
           <div className="flex space-x-2">
             {[
-              { type: "grid", icon: <IoGrid size={20} /> },
-              { type: "list", icon: <IoList size={20} /> },
+              { type: "grid", icon: <IoGrid size={15} /> },
+              { type: "list", icon: <IoList size={15} /> },
             ].map(({ type, icon }) => (
               <RoundButton
                 key={type}
@@ -88,8 +88,8 @@ const List = () => {
             <div
               className={
                 view === "grid"
-                  ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
-                  : "grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-4"
+                  ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4"
+                  : "grid grid-cols-1 gap-4"
               }
             >
               {products.map((product) => (

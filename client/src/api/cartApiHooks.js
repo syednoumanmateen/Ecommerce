@@ -3,7 +3,8 @@ import {
   getCart,
   addCart,
   updateCart,
-  deleteCart,
+  removeFromCart,
+  clearCart
 } from "../api/api";
 
 export const useCart = (_id) => {
@@ -36,13 +37,24 @@ export const useUpdateCart = () => {
   });
 };
 
-export const useDeleteCart = () => {
+export const useRemoveFromCart = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn:  (_id) => deleteCart(_id),
+    mutationFn: removeFromCart,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["cart"] });
+      queryClient.invalidateQueries({ queryKey: ['cart'] });
+    },
+  });
+};
+
+export const useClearCart = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: clearCart,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['cart'] });
     },
   });
 };

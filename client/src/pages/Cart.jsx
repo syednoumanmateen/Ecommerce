@@ -1,54 +1,42 @@
-import { useCart, useDeleteCart, useUpdateCart } from '../api/cartApiHooks';
+import { useDispatch } from 'react-redux';
+import { useCart } from '../api/cartApiHooks';
 import ProductCard from '../components/product/ProductCard';
-import Button from '../components/UI/Button';
 import { useUser } from '../context/UserContext';
-import { useState } from 'react';
+import { addCartItems } from '../store/slices/activeItemSlice';
+import { useEffect } from 'react';
 
 const Cart = () => {
   const { userData } = useUser();
   const userId = userData?.user._id;
+  const dispatch = useDispatch()
 
   const { data } = useCart(userId);
-  const updateCartMutation = useUpdateCart();
-  const deleteCartMutation = useDeleteCart();
-
-  const handleUpdate = (_id, quantity) => {
-    if (quantity < 1) return;
-    updateCartMutation.mutate({ _id, data: { quantity } });
-  };
-
-  const handleRemove = (_id) => {
-    deleteCartMutation.mutate(_id);
-  };
-
-  const cartItems = data?.data?.items || [];
-
-  const total = cartItems.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0
-  );
+  useEffect(() => {
+    if (data?.data?.items) {
+      dispatch(addCartItems(data?.data?.items?.map(i => i._id)));
+    }
+  }, [data, dispatch]);
 
   return (
-    <div className="my-5">
-      <h3 className="mb-4 text-center">Your CArt</h3>
+    <div className="flex flex-col md:flex-row h-full min-h-screen gap-2 p-2">
+      <main className="flex-1 flex flex-col">
+        <header className="p-2 mx-2 flex justify-between items-center">
+          <h1 className="text-xl font-semibold">Cart</h1>
+        </header>
 
-      {data?.data?.items?.length === 0 ? (
-        <div className="alert alert-info text-center">Your cart is empty</div>
-      ) : (
-        <>
-          <div className="g-4">
-            {data?.data?.items?.map(({ product }) => (
-              <ProductCard key={product._id} product={product} view={"list"} context="cart" />
-            ))}
-          </div>
-
-          <div className="d-flex justify-content-end">
-            <h4>
-              Total: <span className="text-success">${total.toFixed(2)}</span>
-            </h4>
-          </div>
-        </>
-      )}
+        <section className="flex-1 overflow-y-auto scrollbar-hide p-2">
+          {data?.data?.items?.length > 0 ? (
+            <div
+              className="grid grid-cols-1 gap-4"            >
+              {data?.data?.items?.map((product) => (
+                <ProductCard key={product._id} product={product} view={'list'} context="cart" />
+              ))}
+            </div>
+          ) : (
+            <p className="text-gray-500 text-center mt-10">No products found.</p>
+          )}
+        </section>
+      </main>
     </div>
   );
 };

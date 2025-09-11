@@ -4,7 +4,6 @@ const productPopulatePipeline = require("../helper");
 
 const isValidObjectId = (_id) => mongoose.Types.ObjectId.isValid(_id);
 
-// Create Product
 const addProduct = async (req, res) => {
   try {
     const product = new Product(req.body);
@@ -25,7 +24,6 @@ const addProduct = async (req, res) => {
   }
 };
 
-// Get all Products
 const getProducts = async (req, res) => {
   try {
     const {
@@ -89,9 +87,6 @@ const getProducts = async (req, res) => {
   }
 };
 
-
-
-// Get single Product
 const getProduct = async (req, res) => {
   try {
     const { _id } = req.params;
@@ -176,8 +171,6 @@ const getProduct = async (req, res) => {
   }
 };
 
-
-// Update Product
 const updateProduct = async (req, res) => {
   try {
     const { _id } = req.params;
@@ -210,7 +203,6 @@ const updateProduct = async (req, res) => {
   }
 };
 
-// Delete Product
 const deleteProduct = async (req, res) => {
   try {
     const { _id } = req.params;

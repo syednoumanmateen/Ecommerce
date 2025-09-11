@@ -77,7 +77,7 @@ const getCart = async (req, res) => {
       },
       {
         $addFields: {
-          "items.product": { $arrayElemAt: ["$items.productDetails", 0] }
+          "items": { $arrayElemAt: ["$items.productDetails", 0] }
         }
       },
       { $project: { "items.productDetails": 0 } },
@@ -147,7 +147,7 @@ const updateCart = async (req, res) => {
   }
 };
 
-const deleteCart = async (req, res) => {
+const removeFromCart = async (req, res) => {
   try {
     const { userId } = req.params;
     const result = await Cart.findOneAndDelete({ user: userId });
@@ -174,7 +174,7 @@ const clearCart = async (req, res) => {
       return res.status(404).json({ error: "Cart not found", status: 404 });
     }
 
-    cart.items = []; // empty the items array
+    cart.items = [];
     await cart.save();
 
     res.status(200).json({

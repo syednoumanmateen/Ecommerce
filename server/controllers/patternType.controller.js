@@ -3,7 +3,6 @@ const PatternType = require("../models/patternType.model");
 
 const isValidObjectId = (_id) => mongoose.Types.ObjectId.isValid(_id);
 
-// Create
 const addPatternType = async (req, res) => {
   try {
     const patternType = new PatternType(req.body);
@@ -23,8 +22,6 @@ const addPatternType = async (req, res) => {
     });
   }
 };
-
-// Get all
 const getPatternTypes = async (req, res) => {
   try {
     const patternTypes = await PatternType.aggregate([
@@ -54,7 +51,6 @@ const getPatternTypes = async (req, res) => {
 };
 
 
-// Get single
 const getPatternType = async (req, res) => {
   try {
     const { _id } = req.params;
@@ -95,7 +91,6 @@ const getPatternType = async (req, res) => {
 };
 
 
-// Update
 const updatePatternType = async (req, res) => {
   try {
     const { _id } = req.params;
@@ -127,7 +122,6 @@ const updatePatternType = async (req, res) => {
   }
 };
 
-// Delete
 const deletePatternType = async (req, res) => {
   try {
     const { _id } = req.params;

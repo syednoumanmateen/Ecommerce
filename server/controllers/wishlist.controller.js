@@ -33,7 +33,7 @@ const getWishlist = async (req, res) => {
       },
       {
         $addFields: {
-          "items.product": { $arrayElemAt: ["$items.productDetails", 0] }
+          "items": { $arrayElemAt: ["$items.productDetails", 0] }
         }
       },
       { $project: { "items.productDetails": 0 } },
@@ -74,8 +74,6 @@ const getWishlist = async (req, res) => {
   }
 };
 
-
-// POST: Add Product to Wishlist
 const addWishlist = async (req, res) => {
   try {
     const { userId, productId } = req.body;
@@ -114,8 +112,6 @@ const addWishlist = async (req, res) => {
   }
 };
 
-
-// DELETE: Remove Product from Wishlist
 const removeFromWishlist = async (req, res) => {
   try {
     const { userId, productId } = req.body;
@@ -137,7 +133,6 @@ const removeFromWishlist = async (req, res) => {
   }
 };
 
-// DELETE: Clear Entire Wishlist
 const clearWishlist = async (req, res) => {
   try {
     await Wishlist.findOneAndDelete({ user: req.params.userId });

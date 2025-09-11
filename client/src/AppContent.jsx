@@ -4,11 +4,9 @@ import "./App.css";
 import Loader from "./components/loading/Loader";
 import GlobalLoader from "./components/loading/GlobalLoader";
 
-// Layouts
 const UnProtected = lazy(() => import("./components/Layout/UnProtected"));
 const Protected = lazy(() => import("./components/Layout/Protected"));
 
-// Pages
 const Home = lazy(() => import("./pages/Dashboard"));
 const Login = lazy(() => import("./pages/Auth/Login"));
 const Register = lazy(() => import("./pages/Auth/Register"));

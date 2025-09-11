@@ -3,7 +3,6 @@ const ShopRoom = require("../models/shopRoom.model");
 
 const isValidObjectId = (_id) => mongoose.Types.ObjectId.isValid(_id);
 
-// Create
 const addShopRoom = async (req, res) => {
   try {
     const shopRoom = new ShopRoom(req.body);
@@ -24,7 +23,6 @@ const addShopRoom = async (req, res) => {
   }
 };
 
-// Get all
 const getShopRooms = async (req, res) => {
   try {
     const shopRooms = await ShopRoom.aggregate([
@@ -72,8 +70,6 @@ const getShopRooms = async (req, res) => {
   }
 };
 
-
-// Get one
 const getShopRoom = async (req, res) => {
   try {
     const { _id } = req.params;
@@ -132,7 +128,6 @@ const getShopRoom = async (req, res) => {
   }
 };
 
-// Update
 const updateShopRoom = async (req, res) => {
   try {
     const { _id } = req.params;
@@ -164,7 +159,6 @@ const updateShopRoom = async (req, res) => {
   }
 };
 
-// Delete
 const deleteShopRoom = async (req, res) => {
   try {
     const { _id } = req.params;

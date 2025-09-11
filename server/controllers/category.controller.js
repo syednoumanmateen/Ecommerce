@@ -3,7 +3,6 @@ const Category = require("../models/category.model");
 
 const isValidObjectId = (_id) => mongoose.Types.ObjectId.isValid(_id);
 
-// Add category
 const addCategory = async (req, res) => {
   try {
     const category = new Category(req.body);
@@ -24,7 +23,6 @@ const addCategory = async (req, res) => {
   }
 };
 
-// Get all categories
 const getCategories = async (req, res) => {
   try {
     const categories = await Category.aggregate([
@@ -55,7 +53,6 @@ const getCategories = async (req, res) => {
 };
 
 
-// Get single category
 const getCategory = async (req, res) => {
   try {
     const { _id } = req.params;
@@ -97,7 +94,6 @@ const getCategory = async (req, res) => {
 };
 
 
-// Update category
 const updateCategory = async (req, res) => {
   try {
     const { _id } = req.params;
@@ -129,7 +125,6 @@ const updateCategory = async (req, res) => {
   }
 };
 
-// Delete category
 const deleteCategory = async (req, res) => {
   try {
     const { _id } = req.params;

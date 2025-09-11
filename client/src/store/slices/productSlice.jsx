@@ -12,7 +12,7 @@ const initialState = {
     },
     search: "",
     pagination: { page: 1, perPage: 10 },
-    view: "list",
+    view: "grid"
 };
 
 const productSlice = createSlice({

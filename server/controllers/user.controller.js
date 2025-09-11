@@ -8,7 +8,6 @@ const sanitizeUser = (user) => {
   return rest;
 };
 
-// Register
 const register = async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -35,7 +34,6 @@ const register = async (req, res) => {
   }
 };
 
-// Login
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -61,7 +59,6 @@ const login = async (req, res) => {
   }
 };
 
-// Forgot Password
 const forgotPassword = async (req, res) => {
   try {
     const { email } = req.body;
@@ -87,7 +84,6 @@ const forgotPassword = async (req, res) => {
   }
 };
 
-// Reset Password
 const resetPassword = async (req, res) => {
   try {
     const { token, newPassword } = req.body;
@@ -113,7 +109,6 @@ const resetPassword = async (req, res) => {
   }
 };
 
-// Get Profile
 const getProfile = async (req, res) => {
   try {
     if (!req.user) return res.status(401).json({ error: "Unauthorized" });
@@ -127,7 +122,6 @@ const getProfile = async (req, res) => {
   }
 };
 
-// Update Profile
 const updateProfile = async (req, res) => {
   try {
     const user = await User.findById(req.user._id);
@@ -151,7 +145,6 @@ const updateProfile = async (req, res) => {
   }
 };
 
-// Verify token
 const verifyToken = async (req, res) => {
   const errorResponse = { message: "Invalid or expired token", valid: false };
 
