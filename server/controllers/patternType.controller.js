@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const PatternType = require("../models/patternType.model");
 
-const isValidObjectId = (id) => mongoose.Types.ObjectId.isValid(id);
+const isValidObjectId = (_id) => mongoose.Types.ObjectId.isValid(_id);
 
 // Create
 const addPatternType = async (req, res) => {
@@ -57,13 +57,13 @@ const getPatternTypes = async (req, res) => {
 // Get single
 const getPatternType = async (req, res) => {
   try {
-    const { id } = req.params;
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res.status(400).json({ error: "Invalid ID", status: 400 });
+    const { _id } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(_id)) {
+      return res.status(400).json({ error: "Invalid _id", status: 400 });
     }
 
     const [patternType] = await PatternType.aggregate([
-      { $match: { _id: new mongoose.Types.ObjectId(id) } },
+      { $match: { _id: new mongoose.Types.ObjectId(_id) } },
       {
         $project: {
           _id: 1,
@@ -98,12 +98,12 @@ const getPatternType = async (req, res) => {
 // Update
 const updatePatternType = async (req, res) => {
   try {
-    const { id } = req.params;
-    if (!isValidObjectId(id)) {
-      return res.status(400).json({ error: "Invalid ID", status: 400 });
+    const { _id } = req.params;
+    if (!isValidObjectId(_id)) {
+      return res.status(400).json({ error: "Invalid _id", status: 400 });
     }
 
-    const updated = await PatternType.findByIdAndUpdate(id, req.body, {
+    const updated = await PatternType.findByIdAndUpdate(_id, req.body, {
       new: true,
       runValidators: true,
     });
@@ -130,12 +130,12 @@ const updatePatternType = async (req, res) => {
 // Delete
 const deletePatternType = async (req, res) => {
   try {
-    const { id } = req.params;
-    if (!isValidObjectId(id)) {
-      return res.status(400).json({ error: "Invalid ID", status: 400 });
+    const { _id } = req.params;
+    if (!isValidObjectId(_id)) {
+      return res.status(400).json({ error: "Invalid _id", status: 400 });
     }
 
-    const deleted = await PatternType.findByIdAndDelete(id);
+    const deleted = await PatternType.findByIdAndDelete(_id);
 
     if (!deleted) {
       return res.status(404).json({ error: "Pattern Type not found", status: 404 });

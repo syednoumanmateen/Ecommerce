@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Category = require("../models/category.model");
 
-const isValidObjectId = (id) => mongoose.Types.ObjectId.isValid(id);
+const isValidObjectId = (_id) => mongoose.Types.ObjectId.isValid(_id);
 
 // Add category
 const addCategory = async (req, res) => {
@@ -58,13 +58,13 @@ const getCategories = async (req, res) => {
 // Get single category
 const getCategory = async (req, res) => {
   try {
-    const { id } = req.params;
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res.status(400).json({ error: "Invalid category ID", status: 400 });
+    const { _id } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(_id)) {
+      return res.status(400).json({ error: "Invalid category _id", status: 400 });
     }
 
     const [category] = await Category.aggregate([
-      { $match: { _id: new mongoose.Types.ObjectId(id) } },
+      { $match: { _id: new mongoose.Types.ObjectId(_id) } },
       {
         $project: {
           _id: 1,
@@ -100,12 +100,12 @@ const getCategory = async (req, res) => {
 // Update category
 const updateCategory = async (req, res) => {
   try {
-    const { id } = req.params;
-    if (!isValidObjectId(id)) {
-      return res.status(400).json({ error: "Invalid category ID", status: 400 });
+    const { _id } = req.params;
+    if (!isValidObjectId(_id)) {
+      return res.status(400).json({ error: "Invalid category _id", status: 400 });
     }
 
-    const updated = await Category.findByIdAndUpdate(id, req.body, {
+    const updated = await Category.findByIdAndUpdate(_id, req.body, {
       new: true,
       runValidators: true,
     });
@@ -132,12 +132,12 @@ const updateCategory = async (req, res) => {
 // Delete category
 const deleteCategory = async (req, res) => {
   try {
-    const { id } = req.params;
-    if (!isValidObjectId(id)) {
-      return res.status(400).json({ error: "Invalid category ID", status: 400 });
+    const { _id } = req.params;
+    if (!isValidObjectId(_id)) {
+      return res.status(400).json({ error: "Invalid category _id", status: 400 });
     }
 
-    const deleted = await Category.findByIdAndDelete(id);
+    const deleted = await Category.findByIdAndDelete(_id);
     if (!deleted) {
       return res.status(404).json({ error: "Category not found", status: 404 });
     }

@@ -5,8 +5,8 @@ const router = express.Router();
 
 router.post("/", protect, addShopRoom);
 router.get("/", protect, getShopRooms);
-router.get("/:id", protect, getShopRoom);
-router.put("/:id", protect, updateShopRoom);
-router.delete("/:id", protect, deleteShopRoom);
+router.get("/:_id", protect, getShopRoom);
+router.put("/:_id", protect, updateShopRoom);
+router.delete("/:_id", protect, deleteShopRoom);
 
 module.exports = router;

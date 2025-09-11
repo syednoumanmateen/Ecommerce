@@ -5,8 +5,8 @@ const router = express.Router();
 
 router.post("/", protect, addCategory);
 router.get("/", protect, getCategories);
-router.get("/:id", protect, getCategory);
-router.put("/:id", protect, updateCategory);
-router.delete("/:id", protect, deleteCategory);
+router.get("/:_id", protect, getCategory);
+router.put("/:_id", protect, updateCategory);
+router.delete("/:_id", protect, deleteCategory);
 
 module.exports = router;

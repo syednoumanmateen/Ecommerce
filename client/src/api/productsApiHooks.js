@@ -11,7 +11,6 @@ import { useSelector } from "react-redux";
 export const useProducts = () => {
   const { filters, search, pagination } = useSelector(state => state.product);
 
-
   return useQuery({
     queryKey: ["products", { search, filters, pagination }],
     queryFn: () => getProducts({
@@ -28,12 +27,12 @@ export const useProducts = () => {
   });
 };
 
-export const useProduct = (id) => {
+export const useProduct = (_id) => {
 
   return useQuery({
-    queryKey: ["product", id],
-    queryFn: () => getProductById(id),
-    enabled: !!id,
+    queryKey: ["product", _id],
+    queryFn: () => getProductById(_id),
+    enabled: !!_id,
   });
 };
 
@@ -52,7 +51,7 @@ export const useUpdateProduct = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ id, data }) => updateProduct(id, data),
+    mutationFn: ({ _id, data }) => updateProduct(_id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["product"] });
     },
@@ -63,7 +62,7 @@ export const useDeleteProduct = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (id) => deleteProduct(id),
+    mutationFn: (_id) => deleteProduct(_id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["product"] });
     },

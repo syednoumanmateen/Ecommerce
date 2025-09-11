@@ -15,12 +15,12 @@ export const useCategories = (filters = {}) => {
   });
 };
 
-export const useCategory = (id) => {
+export const useCategory = (_id) => {
   
   return useQuery({
-    queryKey: ["category", id],
-    queryFn: () => getCategoryById(id),
-    enabled: !!id,
+    queryKey: ["category", _id],
+    queryFn: () => getCategoryById(_id),
+    enabled: !!_id,
   });
 };
 
@@ -39,7 +39,7 @@ export const useUpdateCategory = () => {
   const queryClient = useQueryClient();
   
   return useMutation({
-    mutationFn: ({ id, data }) => updateCategory(id, data),
+    mutationFn: ({ _id, data }) => updateCategory(_id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["category"] });
     },
@@ -50,7 +50,7 @@ export const useDeleteCategory = () => {
   const queryClient = useQueryClient();
   
   return useMutation({
-    mutationFn: (id) => deleteCategory(id),
+    mutationFn: (_id) => deleteCategory(_id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["category"] });
     },

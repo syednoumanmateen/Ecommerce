@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Product = require("../models/Product.model");
 
-const isValidObjectId = (id) => mongoose.Types.ObjectId.isValid(id);
+const isValidObjectId = (_id) => mongoose.Types.ObjectId.isValid(_id);
 
 // Create Product
 const addProduct = async (req, res) => {
@@ -125,14 +125,14 @@ const getProducts = async (req, res) => {
 // Get single Product
 const getProduct = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { _id } = req.params;
 
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res.status(400).json({ error: "Invalid product ID", status: 400 });
+    if (!mongoose.Types.ObjectId.isValid(_id)) {
+      return res.status(400).json({ error: "Invalid product _id", status: 400 });
     }
 
     const [product] = await Product.aggregate([
-      { $match: { _id: new mongoose.Types.ObjectId(id) } },
+      { $match: { _id: new mongoose.Types.ObjectId(_id) } },
       {
         $lookup: {
           from: "categories",
@@ -211,13 +211,13 @@ const getProduct = async (req, res) => {
 // Update Product
 const updateProduct = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { _id } = req.params;
 
-    if (!isValidObjectId(id)) {
-      return res.status(400).json({ error: "Invalid product ID", status: 400 });
+    if (!isValidObjectId(_id)) {
+      return res.status(400).json({ error: "Invalid product _id", status: 400 });
     }
 
-    const updated = await Product.findByIdAndUpdate(id, req.body, {
+    const updated = await Product.findByIdAndUpdate(_id, req.body, {
       new: true,
       runValidators: true,
     });
@@ -244,13 +244,13 @@ const updateProduct = async (req, res) => {
 // Delete Product
 const deleteProduct = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { _id } = req.params;
 
-    if (!isValidObjectId(id)) {
-      return res.status(400).json({ error: "Invalid product ID", status: 400 });
+    if (!isValidObjectId(_id)) {
+      return res.status(400).json({ error: "Invalid product _id", status: 400 });
     }
 
-    const deleted = await Product.findByIdAndDelete(id);
+    const deleted = await Product.findByIdAndDelete(_id);
 
     if (!deleted) {
       return res.status(404).json({ error: "Product not found", status: 404 });

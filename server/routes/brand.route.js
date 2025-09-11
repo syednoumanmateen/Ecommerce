@@ -5,8 +5,8 @@ const router = express.Router();
 
 router.post("/", protect, addBrand);
 router.get("/", protect, getBrands);
-router.get("/:id", protect, getBrand);
-router.put("/:id", protect, updateBrand);
-router.delete("/:id", protect, deleteBrand);
+router.get("/:_id", protect, getBrand);
+router.put("/:_id", protect, updateBrand);
+router.delete("/:_id", protect, deleteBrand);
 
 module.exports = router;

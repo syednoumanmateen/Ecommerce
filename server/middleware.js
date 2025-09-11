@@ -22,7 +22,7 @@ const decodeToken = async (token) => {
         if (!token) return unauthorized("No token provided");
 
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        return await User.findById(decoded.id).select("-password");
+        return await User.findById(decoded._id).select("-password");
     } catch (e) {
         return null
     }

@@ -9,7 +9,6 @@ import Loader from "../loading/Loader";
 
 const Protected = () => {
   const { userData, clearUser } = useUser();
-  const token = userData?.token;
   const { mutateAsync } = useVerifyToken();
   const navigate = useNavigate();
 

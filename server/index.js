@@ -33,7 +33,7 @@ app.use('/api/category', categoryRoute);
 app.use('/api/pattern-type', patternTypeRoute);
 app.use('/api/product', productRoute);
 app.use('/api/shop-room', shopRoomRoute);
-app.use('/api/whishlist', whishlistRoute);
+app.use('/api/wishlist', whishlistRoute);
 
 // Start the server
 const PORT = process.env.PORT || 5000;

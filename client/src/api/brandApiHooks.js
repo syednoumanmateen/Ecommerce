@@ -14,12 +14,12 @@ export const useBrands = (filters = {}) => {
   });
 };
 
-export const useBrand = (id) => {
+export const useBrand = (_id) => {
 
   return useQuery({
-    queryKey: ["brand", id],
-    queryFn: () => getBrandById(id),
-    enabled: !!id,
+    queryKey: ["brand", _id],
+    queryFn: () => getBrandById(_id),
+    enabled: !!_id,
   });
 };
 
@@ -38,7 +38,7 @@ export const useUpdateBrand = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ id, data }) => updateBrand(id, data),
+    mutationFn: ({ _id, data }) => updateBrand(_id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["brand"] });
     },
@@ -49,7 +49,7 @@ export const useDeleteBrand = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (id) => deleteBrand(id),
+    mutationFn: (_id) => deleteBrand(_id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["brand"] });
     },

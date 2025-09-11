@@ -15,12 +15,12 @@ export const useShopRooms = (filters = {}) => {
   });
 };
 
-export const useShopRoom = (id) => {
+export const useShopRoom = (_id) => {
 
   return useQuery({
-    queryKey: ["shoproom", id],
-    queryFn: () => getShopRoomById(id),
-    enabled: !!id,
+    queryKey: ["shoproom", _id],
+    queryFn: () => getShopRoomById(_id),
+    enabled: !!_id,
   });
 };
 
@@ -39,7 +39,7 @@ export const useUpdateShopRoom = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ id, data }) => updateShopRoom(id, data),
+    mutationFn: ({ _id, data }) => updateShopRoom(_id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["shoproom"] });
     },
@@ -50,7 +50,7 @@ export const useDeleteShopRoom = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (id) => deleteShopRoom(id),
+    mutationFn: (_id) => deleteShopRoom(_id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["shoproom"] });
     },

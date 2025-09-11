@@ -2,7 +2,7 @@ const Brand = require("../models/brand.model");
 const mongoose = require("mongoose");
 
 // Helper: check for valid ObjectId
-const isValidObjectId = (id) => mongoose.Types.ObjectId.isValid(id);
+const isValidObjectId = (_id) => mongoose.Types.ObjectId.isValid(_id);
 
 // Create brand
 const addBrand = async (req, res) => {
@@ -53,16 +53,16 @@ const getBrands = async (req, res) => {
   }
 };
 
-// Get single brand by ID
+// Get single brand by _id
 const getBrand = async (req, res) => {
   try {
-    const { id } = req.params;
-    if (!isValidObjectId(id)) {
-      return res.status(400).json({ error: "Invalid brand ID", status: 400 });
+    const { _id } = req.params;
+    if (!isValidObjectId(_id)) {
+      return res.status(400).json({ error: "Invalid brand _id", status: 400 });
     }
 
     const brand = await Brand.aggregate([{
-      $match: { _id: new mongoose.Types.ObjectId(id) }
+      $match: { _id: new mongoose.Types.ObjectId(_id) }
     },
     {
       $project: {
@@ -95,12 +95,12 @@ const getBrand = async (req, res) => {
 // Update brand
 const updateBrand = async (req, res) => {
   try {
-    const { id } = req.params;
-    if (!isValidObjectId(id)) {
-      return res.status(400).json({ error: "Invalid brand ID", status: 400 });
+    const { _id } = req.params;
+    if (!isValidObjectId(_id)) {
+      return res.status(400).json({ error: "Invalid brand _id", status: 400 });
     }
 
-    const updated = await Brand.findByIdAndUpdate(id, req.body, {
+    const updated = await Brand.findByIdAndUpdate(_id, req.body, {
       new: true,
       runValidators: true,
     });
@@ -127,12 +127,12 @@ const updateBrand = async (req, res) => {
 // Delete brand
 const deleteBrand = async (req, res) => {
   try {
-    const { id } = req.params;
-    if (!isValidObjectId(id)) {
-      return res.status(400).json({ error: "Invalid brand ID", status: 400 });
+    const { _id } = req.params;
+    if (!isValidObjectId(_id)) {
+      return res.status(400).json({ error: "Invalid brand _id", status: 400 });
     }
 
-    const deleted = await Brand.findByIdAndDelete(id);
+    const deleted = await Brand.findByIdAndDelete(_id);
 
     if (!deleted) {
       return res.status(404).json({ error: "Brand not found", status: 404 });

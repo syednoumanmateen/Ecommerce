@@ -1,12 +1,12 @@
 import { useEffect } from "react";
+import { IoGrid, IoList } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
-import { setView, setPagination } from "../../store/slices/productSlice";
+import { useProducts } from "../../api/productsApiHooks";
 import ProductCard from "../../components/product/ProductCard";
 import ProductFilter from "../../components/product/ProductFilter";
 import Button from "../../components/UI/Button";
 import RoundButton from "../../components/UI/RoundButton";
-import { useProducts } from "../../api/productsApiHooks";
-import { IoGrid, IoList } from "react-icons/io5";
+import { setPagination, setView } from "../../store/slices/productSlice";
 
 const List = () => {
   const dispatch = useDispatch();

@@ -46,7 +46,7 @@ const login = async (req, res) => {
     const isMatch = await user.matchPassword(password);
     if (!isMatch) return res.status(400).json({ error: "Invalid credentials" });
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1d" });
+    const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: "1d" });
     user.resetPasswordToken = token;
     user.resetPasswordExpires = Date.now() + 1000 * 60 * 15;
     await user.save();

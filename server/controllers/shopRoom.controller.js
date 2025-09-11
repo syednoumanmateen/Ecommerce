@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const ShopRoom = require("../models/shopRoom.model");
 
-const isValidObjectId = (id) => mongoose.Types.ObjectId.isValid(id);
+const isValidObjectId = (_id) => mongoose.Types.ObjectId.isValid(_id);
 
 // Create
 const addShopRoom = async (req, res) => {
@@ -76,13 +76,13 @@ const getShopRooms = async (req, res) => {
 // Get one
 const getShopRoom = async (req, res) => {
   try {
-    const { id } = req.params;
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res.status(400).json({ error: "Invalid Shop Room ID", status: 400 });
+    const { _id } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(_id)) {
+      return res.status(400).json({ error: "Invalid Shop Room _id", status: 400 });
     }
 
     const [shopRoom] = await ShopRoom.aggregate([
-      { $match: { _id: new mongoose.Types.ObjectId(id) } },
+      { $match: { _id: new mongoose.Types.ObjectId(_id) } },
       {
         $lookup: {
           from: "categories",
@@ -135,12 +135,12 @@ const getShopRoom = async (req, res) => {
 // Update
 const updateShopRoom = async (req, res) => {
   try {
-    const { id } = req.params;
-    if (!isValidObjectId(id)) {
-      return res.status(400).json({ error: "Invalid Shop Room ID", status: 400 });
+    const { _id } = req.params;
+    if (!isValidObjectId(_id)) {
+      return res.status(400).json({ error: "Invalid Shop Room _id", status: 400 });
     }
 
-    const updated = await ShopRoom.findByIdAndUpdate(id, req.body, {
+    const updated = await ShopRoom.findByIdAndUpdate(_id, req.body, {
       new: true,
       runValidators: true
     });
@@ -167,12 +167,12 @@ const updateShopRoom = async (req, res) => {
 // Delete
 const deleteShopRoom = async (req, res) => {
   try {
-    const { id } = req.params;
-    if (!isValidObjectId(id)) {
-      return res.status(400).json({ error: "Invalid Shop Room ID", status: 400 });
+    const { _id } = req.params;
+    if (!isValidObjectId(_id)) {
+      return res.status(400).json({ error: "Invalid Shop Room _id", status: 400 });
     }
 
-    const deleted = await ShopRoom.findByIdAndDelete(id);
+    const deleted = await ShopRoom.findByIdAndDelete(_id);
     if (!deleted) {
       return res.status(404).json({ error: "Shop Room not found", status: 404 });
     }

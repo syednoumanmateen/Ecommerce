@@ -5,24 +5,20 @@ const initialState = {
   items: [],
 };
 
-const cartSlice = createSlice({
-  name: 'cart',
+const wishlistSlice = createSlice({
+  name: 'wishlist',
   initialState,
   reducers: {
     setUserId(state, action) {
       state.userId = action.payload;
     },
-    addToCart(state, action) {
+    addWishlist(state, action) {
       const item = action.payload;
-      const existingItem = state.items.find(i => i._id === item._id);
-      if (existingItem) {
-        existingItem.quantity += item.quantity || 1;
-        state.items = state.items.map(i => i._id === existingItem._id ? existingItem : i);
-      } else {
-        state.items.push(item);
-      }
+      const existingItem = state.items.find(i => i._id === item);
+      if (existingItem) return
+      state.items.push(item);
     },
-    removeFromCart(state, action) {
+    removeFromWishlist(state, action) {
       state.items = state.items.filter(item => item._id !== action.payload);
     },
     updateQuantity(state, action) {
@@ -30,10 +26,10 @@ const cartSlice = createSlice({
       const item = state.items.find(i => i._id === _id);
       if (item) item.quantity = quantity;
     },
-    clearCart(state) {
+    clearWishlist(state) {
       state.items = [];
     },
-    setCart(state, action) {
+    setWishlist(state, action) {
       state.items = action.payload;
     },
   },
@@ -41,11 +37,11 @@ const cartSlice = createSlice({
 
 export const {
   setUserId,
-  addToCart,
-  removeFromCart,
+  addWishlist,
+  removeFromWishlist,
   updateQuantity,
-  clearCart,
-  setCart,
-} = cartSlice.actions;
+  clearWishlist,
+  setWishlist,
+} = wishlistSlice.actions;
 
-export default cartSlice.reducer;
+export default wishlistSlice.reducer;

@@ -1,43 +1,69 @@
+const mongoose = require("mongoose");
 const Wishlist = require("../models/wishlist.model");
 
-// GET: Get Wishlist by User ID
 const getWishlist = async (req, res) => {
   try {
     const { userId } = req.params;
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
 
-    if (!mongoose.Types.ObjectId.isValid(userId)) {
-      return res.status(400).json({ error: "Invalid user ID" });
-    }
-
-    const [wishlist] = await Wishlist.aggregate([
+    const totalCountResult = await Wishlist.aggregate([
       { $match: { user: new mongoose.Types.ObjectId(userId) } },
+      { $unwind: "$items" },
+      { $count: "totalItems" }
+    ]);
+
+    const totalItems = totalCountResult.length > 0 ? totalCountResult[0].totalItems : 0;
+
+    const wishlists = await Wishlist.aggregate([
+      { $match: { user: new mongoose.Types.ObjectId(userId) } },
+      { $unwind: { path: "$items", preserveNullAndEmptyArrays: true } },
       {
         $lookup: {
           from: "products",
-          localField: "products",
+          localField: "items.product",
           foreignField: "_id",
-          as: "products"
+          as: "items.productDetails"
         }
       },
-      { $limit: 1 },
       {
-        $project: {
-          user: 1,
-          products: {
-            _id: 1,
-            name: 1,
-            price: 1,
-            stock: 1,
-            category: 1,
-            images: 1
-          }
+        $addFields: {
+          "items.product": { $arrayElemAt: ["$items.productDetails", 0] }
+        }
+      },
+      { $project: { "items.productDetails": 0 } },
+      { $sort: { "items._id": 1 } },
+      { $skip: skip },
+      { $limit: limit },
+      {
+        $group: {
+          _id: "$_id",
+          user: { $first: "$user" },
+          status: { $first: "$status" },
+          items: { $push: "$items" },
         }
       }
     ]);
 
-    res.status(200).json(
-      wishlist || { user: userId, products: [] }
-    );
+    const wishlist = wishlists[0]
+
+    if (!wishlist) {
+      return res.status(200).json({
+        items: [],
+        total: 0,
+        page: 1,
+        pages: 0,
+      });
+    }
+
+    res.status(200).json({
+      items: wishlist.items,
+      user: wishlist.user,
+      total: totalItems,
+      page,
+      pages: Math.ceil(totalItems / limit),
+    });
   } catch (error) {
     console.error("Get Wishlist Error:", error.message);
     res.status(500).json({ error: "Failed to fetch wishlist" });
@@ -46,24 +72,44 @@ const getWishlist = async (req, res) => {
 
 
 // POST: Add Product to Wishlist
-const addToWishlist = async (req, res) => {
+const addWishlist = async (req, res) => {
   try {
     const { userId, productId } = req.body;
+
+    if (!userId || !productId) {
+      return res.status(400).json({ error: "Invalid payload", status: 400 });
+    }
+
     let wishlist = await Wishlist.findOne({ user: userId });
 
     if (!wishlist) {
-      wishlist = new Wishlist({ user: userId, products: [productId] });
-    } else if (!wishlist.products.includes(productId)) {
-      wishlist.products.push(productId);
+      wishlist = new Wishlist({
+        user: userId,
+        items: [{ product: productId }]
+      });
+    } else {
+      const exists = wishlist.items.some(
+        (i) => i.product.toString() === productId
+      );
+
+      if (!exists) {
+        wishlist.items.push({ product: productId });
+      }
     }
 
     await wishlist.save();
-    res.status(200).json(wishlist);
+
+    res.status(200).json({
+      data: wishlist,
+      message: "Wishlist updated successfully",
+      status: 200,
+    });
   } catch (error) {
-    console.error("Add to Wishlist Error:", error.message);
-    res.status(500).json({ error: "Failed to add to wishlist" });
+    console.error("Add to wishlist error:", error.message);
+    res.status(500).json({ error: "Failed to update wishlist", status: 500 });
   }
 };
+
 
 // DELETE: Remove Product from Wishlist
 const removeFromWishlist = async (req, res) => {
@@ -71,10 +117,12 @@ const removeFromWishlist = async (req, res) => {
     const { userId, productId } = req.body;
     const wishlist = await Wishlist.findOne({ user: userId });
 
-    if (!wishlist) return res.status(404).json({ error: "Wishlist not found" });
+    if (!wishlist) {
+      return res.status(404).json({ error: "Wishlist not found" });
+    }
 
-    wishlist.products = wishlist.products.filter(
-      (pid) => pid.toString() !== productId
+    wishlist.items = wishlist.items.filter(
+      (item) => item.product.toString() !== productId
     );
 
     await wishlist.save();
@@ -98,7 +146,7 @@ const clearWishlist = async (req, res) => {
 
 module.exports = {
   getWishlist,
-  addToWishlist,
+  addWishlist,
   removeFromWishlist,
   clearWishlist,
 };

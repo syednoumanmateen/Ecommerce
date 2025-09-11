@@ -15,12 +15,12 @@ export const usePatternTypes = (filters = {}) => {
   });
 };
 
-export const usePatternType = (id) => {
+export const usePatternType = (_id) => {
 
   return useQuery({
-    queryKey: ["patterntype", id],
-    queryFn: () => getPatternTypeById(id),
-    enabled: !!id,
+    queryKey: ["patterntype", _id],
+    queryFn: () => getPatternTypeById(_id),
+    enabled: !!_id,
   });
 };
 
@@ -39,7 +39,7 @@ export const useUpdatePatternType = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ id, data }) => updatePatternType(id, data),
+    mutationFn: ({ _id, data }) => updatePatternType(_id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["patterntype"] });
     },
@@ -50,7 +50,7 @@ export const useDeletePatternType = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (id) => deletePatternType(id),
+    mutationFn: (_id) => deletePatternType(_id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["patterntype"] });
     },
