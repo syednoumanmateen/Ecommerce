@@ -1,6 +1,6 @@
 import { CiBag1, CiHeart, CiTrash } from "react-icons/ci";
 import { FaMinus, FaPlus } from "react-icons/fa6";
-import { useAddCart, useDeleteCart, useUpdateCart } from "../../api/cartApiHooks";
+import { useAddCart, useRemoveFromCart, useUpdateCart } from "../../api/cartApiHooks";
 import { useAddWishlist, useRemoveFromWishlist } from "../../api/wishlistApiHooks";
 import { useUser } from "../../context/UserContext";
 import CardBody from "../CardBody";

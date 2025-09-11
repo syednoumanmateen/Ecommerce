@@ -192,6 +192,6 @@ module.exports = {
   addCart,
   getCart,
   updateCart,
-  deleteCart,
+  removeFromCart,
   clearCart
 };
