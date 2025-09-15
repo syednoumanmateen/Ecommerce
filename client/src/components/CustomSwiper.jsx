@@ -17,7 +17,7 @@ const CustomSwiper = ({
   spaceBetween = 20,
   className = "",
   imgWidth = "100%",
-  imgHeight = "200px",
+  imgHeight = "100%",
   objectFit = "cover",
 }) => {
   return (

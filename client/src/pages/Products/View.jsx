@@ -123,9 +123,8 @@ const View = () => {
           <h1 className="text-2xl md:text-3xl font-bold mb-2">{product.name}</h1>
 
           <div className="flex flex-wrap items-center space-x-4 mb-3">
-            <span className="text-xl md:text-2xl text-red-600 font-bold">${product.price}</span>
-            <span className="text-gray-500 line-through text-sm md:text-base">${(product.price * 1.5).toFixed(2)}</span>
-            <span className="text-green-600 text-xs md:text-sm">{product.stock || 15} in stock</span>
+            <p className="text-green-600 font-medium text">${product.price}</p>
+            <span className="text-green-600 text-xs md:text-sm">{product.quantity} in stock</span>
           </div>
 
           <div className="flex items-center space-x-1 text-yellow-400 mb-4 text-sm md:text-base">
@@ -149,7 +148,7 @@ const View = () => {
           <div className="space-y-4">
             <div className="flex gap-1 items-center">
               <RoundButton
-               className="py-1 px-2"
+                className="py-1 px-2"
                 onClick={() => handleQtyChange(-1)}
               >
                 -

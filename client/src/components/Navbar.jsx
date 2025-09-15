@@ -110,7 +110,7 @@ const Navbar = () => {
 
       {/* Mobile Menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden px-4 pb-4 space-y-4 border-t border-gray-200 bg-white">
+        <div className="md:hidden px-4 pb-4 space-y-4 border-gray-200 bg-white">
           <div className="space-y-2">
             {navItems.map((item, index) => (
               <div

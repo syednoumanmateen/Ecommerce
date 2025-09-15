@@ -14,7 +14,7 @@ const ImageGallery = ({ imageUrls = [] }) => {
                         src={url}
                         alt={`Thumbnail ${i}`}
                         onClick={() => setSelectedImage(i)}
-                        className={`w-16 h-16 object-cover border rounded-lg cursor-pointer hover:ring-2 ${selectedImage === i ? "ring-2 ring-blue-500" : ""
+                        className={`w-20 h-20 object-cover border rounded-lg cursor-pointer hover:ring-2 ${selectedImage === i ? "ring-2 ring-blue-500" : ""
                             }`}
                     />
                 ))}

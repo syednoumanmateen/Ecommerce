@@ -7,6 +7,7 @@ import ProductCard from "../../components/product/ProductCard";
 import ProductFilter from "../../components/product/ProductFilter";
 import Button from "../../components/UI/Button";
 import RoundButton from "../../components/UI/RoundButton";
+import Pagination from "../../components/UI/Pagination"; // ✅ import Pagination component
 import { setPagination, setView } from "../../store/slices/productSlice";
 
 const List = () => {
@@ -34,38 +35,6 @@ const List = () => {
     dispatch(setPagination({ page: 1 }));
   }, [filters, search, dispatch]);
 
-  const renderPageButton = (page) => (
-    <RoundButton
-      key={page}
-      onClick={() => goToPage(page)}
-      className={`px-2 py-1 ${pagination.page === page ? "button-round-active" : ""}`}
-    >
-      {page}
-    </RoundButton>
-  );
-
-  const renderPagination = () => {
-    const pages = [renderPageButton(1)];
-
-    if (pagination.page > 3 && totalPages > 4) {
-      pages.push(<span key="start-ellipsis" className="px-2">…</span>);
-    }
-
-    Array.from({ length: totalPages }, (_, i) => i + 1)
-      .filter((p) => p !== 1 && p !== totalPages && Math.abs(p - pagination.page) <= 1)
-      .forEach((p) => pages.push(renderPageButton(p)));
-
-    if (pagination.page < totalPages - 2 && totalPages > 4) {
-      pages.push(<span key="end-ellipsis" className="px-2">…</span>);
-    }
-
-    if (totalPages > 1) {
-      pages.push(renderPageButton(totalPages));
-    }
-
-    return pages;
-  };
-
   return (
     <div className="flex flex-col md:flex-row min-h-screen gap-2 p-2">
       {/* Sidebar (Filters) */}
@@ -79,18 +48,17 @@ const List = () => {
         <header className="p-2 mx-2 flex flex-row justify-between items-start gap-2">
           <h1 className="text-xl font-semibold">Product Listing</h1>
           <div className="flex space-x-2">
-            {[
-              { type: "grid", icon: <IoGrid size={15} /> },
-              { type: "list", icon: <IoList size={15} /> },
-            ].map(({ type, icon }) => (
-              <RoundButton
-                key={type}
-                onClick={() => dispatch(setView(type))}
-                className={`p-1 ${view === type ? "button-round-active" : ""}`}
-              >
-                {icon}
-              </RoundButton>
-            ))}
+            {[{ type: "grid", icon: <IoGrid size={15} /> }, { type: "list", icon: <IoList size={15} /> }].map(
+              ({ type, icon }) => (
+                <RoundButton
+                  key={type}
+                  onClick={() => dispatch(setView(type))}
+                  className={`p-1 ${view === type ? "button-round-active" : ""}`}
+                >
+                  {icon}
+                </RoundButton>
+              )
+            )}
           </div>
         </header>
 
@@ -122,19 +90,11 @@ const List = () => {
         </section>
 
         {/* Pagination Footer */}
-        <footer className="p-4 flex flex-wrap justify-center items-center bg-white gap-2 border-t">
-          {pagination.page > 1 && (
-            <Button className="p-2" onClick={() => goToPage(pagination.page - 1)}>
-              Previous
-            </Button>
-          )}
-          {renderPagination()}
-          {pagination.page < totalPages && (
-            <Button className="p-2" onClick={() => goToPage(pagination.page + 1)}>
-              Next
-            </Button>
-          )}
-        </footer>
+        <Pagination
+          currentPage={pagination.page}
+          totalPages={totalPages}
+          onPageChange={goToPage}
+        />
       </main>
     </div>
   );
