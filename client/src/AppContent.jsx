@@ -7,87 +7,78 @@ import GlobalLoader from "./components/loading/GlobalLoader";
 const UnProtected = lazy(() => import("./components/Layout/UnProtected"));
 const Protected = lazy(() => import("./components/Layout/Protected"));
 
-const Home = lazy(() => import("./pages/Dashboard"));
 const Login = lazy(() => import("./pages/Auth/Login"));
 const Register = lazy(() => import("./pages/Auth/Register"));
 const ForgotPassword = lazy(() => import("./pages/Auth/ForgotPassword"));
 const ResetPassword = lazy(() => import("./pages/Auth/ResetPassword"));
+
 const NotFound = lazy(() => import("./pages/NotFound"));
-
-const BrandAdd = lazy(() => import("./pages/Brand/Add"));
-const BrandList = lazy(() => import("./pages/Brand/List"));
-
-const CategoryAdd = lazy(() => import("./pages/Categories/Add"));
-const CategoryList = lazy(() => import("./pages/Categories/List"));
-
-const ProductAdd = lazy(() => import("./pages/Products/Add"));
-const ProductList = lazy(() => import("./pages/Products/List"));
-const ProductDetails = lazy(() => import("./pages/Products/View"));
-
-const PatternTypeAdd = lazy(() => import("./pages/PatternType/Add"));
-const PatternTypeList = lazy(() => import("./pages/PatternType/List"));
-
-const RoomByAdd = lazy(() => import("./pages/RoomBy/Add"));
-const RoomByList = lazy(() => import("./pages/RoomBy/List"));
-
+const Home = lazy(() => import("./pages/Dashboard"));
 const Cart = lazy(() => import("./pages/Cart"));
 const Wishlist = lazy(() => import("./pages/Wishlist"));
 const Profile = lazy(() => import("./pages/Profile"));
 
+const BrandAdd = lazy(() => import("./pages/Brand/Add"));
+const BrandList = lazy(() => import("./pages/Brand/List"));
+const CategoryAdd = lazy(() => import("./pages/Categories/Add"));
+const CategoryList = lazy(() => import("./pages/Categories/List"));
+const ProductAdd = lazy(() => import("./pages/Products/Add"));
+const ProductList = lazy(() => import("./pages/Products/List"));
+const ProductDetails = lazy(() => import("./pages/Products/View"));
+const PatternTypeAdd = lazy(() => import("./pages/PatternType/Add"));
+const PatternTypeList = lazy(() => import("./pages/PatternType/List"));
+const RoomByAdd = lazy(() => import("./pages/RoomBy/Add"));
+const RoomByList = lazy(() => import("./pages/RoomBy/List"));
+
+const unprotectedRoutes = [
+  { path: "/login", element: <Login /> },
+  { path: "/register", element: <Register /> },
+  { path: "/forgot-password", element: <ForgotPassword /> },
+  { path: "/reset-password", element: <ResetPassword /> },
+  { path: "*", element: <NotFound /> },
+];
+
+const protectedRoutes = [
+  { path: "/", element: <Home /> },
+  { path: "/brand/add", element: <BrandAdd /> },
+  { path: "/brands", element: <BrandList /> },
+  { path: "/category/add", element: <CategoryAdd /> },
+  { path: "/categories", element: <CategoryList /> },
+  { path: "/product/add", element: <ProductAdd /> },
+  { path: "/products", element: <ProductList /> },
+  { path: "/product/details/:id", element: <ProductDetails /> },
+  { path: "/pattern/add", element: <PatternTypeAdd /> },
+  { path: "/patterns", element: <PatternTypeList /> },
+  { path: "/room/add", element: <RoomByAdd /> },
+  { path: "/rooms", element: <RoomByList /> },
+  { path: "/cart", element: <Cart /> },
+  { path: "/wishlist", element: <Wishlist /> },
+  { path: "/profile", element: <Profile /> },
+];
+
 const AppContent = () => {
+  return (
+    <>
+      <GlobalLoader />
+      <Suspense fallback={<Loader />}>
+        <Routes>
+          
+          <Route element={<UnProtected />}>
+            {unprotectedRoutes.map(({ path, element }) => (
+              <Route key={path} path={path} element={element} />
+            ))}
+          </Route>
 
-    return (
-        <>
-            <GlobalLoader />
-            <Suspense fallback={<Loader />}>
-                <Routes>
-                    {/* Unprotected Routes */}
-                    <Route element={<UnProtected />}>
-                        <Route path="/login" element={<Login />} />
-                        <Route path="/register" element={<Register />} />
-                        <Route path="/forgot-password" element={<ForgotPassword />} />
-                        <Route path="/reset-password" element={<ResetPassword />} />
-                        <Route path="*" element={<NotFound />} />
-                    </Route>
-
-                    {/* Protected Routes */}
-                    <Route element={<Protected />}>
-                        <Route path="/" element={<Home />} />
-
-                        {/* Brand */}
-                        <Route path="/brand/add" element={<BrandAdd />} />
-                        <Route path="/brands" element={<BrandList />} />
-
-                        {/* Category */}
-                        <Route path="/category/add" element={<CategoryAdd />} />
-                        <Route path="/categories" element={<CategoryList />} />
-
-                        {/* Product */}
-                        <Route path="/product/add" element={<ProductAdd />} />
-                        <Route path="/products" element={<ProductList />} />
-                        <Route path="/product/details/:id" element={<ProductDetails />} />
-
-                        {/* Pattern Type */}
-                        <Route path="/pattern/add" element={<PatternTypeAdd />} />
-                        <Route path="/patterns" element={<PatternTypeList />} />
-
-                        {/* Room By */}
-                        <Route path="/room/add" element={<RoomByAdd />} />
-                        <Route path="/rooms" element={<RoomByList />} />
-
-                        {/* Cart */}
-                        <Route path="/cart" element={<Cart />} />
-
-                        {/* Wishlist */}
-                        <Route path="/wishlist" element={<Wishlist />} />
-
-                        {/* Profile */}
-                        <Route path="/profile" element={<Profile />} />
-                    </Route>
-                </Routes>
-            </Suspense>
-        </>
-    );
+          
+          <Route element={<Protected />}>
+            {protectedRoutes.map(({ path, element }) => (
+              <Route key={path} path={path} element={element} />
+            ))}
+          </Route>
+        </Routes>
+      </Suspense>
+    </>
+  );
 };
 
 export default AppContent;

@@ -138,7 +138,7 @@ const getProduct = async (req, res) => {
           name: 1,
           description: 1,
           price: 1,
-          stock: 1,
+          quantity: 1,
           images: 1,
           featured: 1,
           rating: 1,

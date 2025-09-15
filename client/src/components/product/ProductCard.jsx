@@ -96,16 +96,32 @@ const ProductCard = ({ product, view = "grid", context = "product", onClick }) =
   const imageUrls = images.map((img) => (img.startsWith("http") ? img : `${BASE_URL}${img}`));
 
   return (
-    <CardBody className={`relative group ${view === "list" ? "flex items-center justify-center gap-4 p-4" : ""}`}>
-      <div className={`${view === "list" ? "w-1/4" : "w-full"} shrink-0`}>
-        <CustomSwiper slides={imageUrls} slidesPerView={1} autoplay={true} />
+    <CardBody
+      className={`relative group ${view === "list"
+          ? "flex flex-col sm:flex-row items-center gap-4 p-4"
+          : "flex flex-col"
+        }`}
+    >
+      {/* Image */}
+      <div
+        className={`${view === "list" ? "sm:w-1/4 w-full" : "w-full"
+          } shrink-0 relative`}
+      >
+        <CustomSwiper
+          slides={imageUrls}
+          slidesPerView={1}
+          autoplay={true}
+          className="w-full h-full"
+        />
       </div>
 
+      {/* Action Buttons */}
       <div className="absolute top-2 right-2 flex flex-col space-y-2 z-50">
         {context === "product" && (
           <>
             <RoundButton
-              className={`p-1 ${isInCart ? "button-round-active bg-gray-300 cursor-not-allowed" : ""}`}
+              className={`p-1 ${isInCart ? "button-round-active bg-gray-300 cursor-not-allowed" : ""
+                }`}
               onClick={handleAddToCart}
               disabled={isInCart}
             >
@@ -113,19 +129,21 @@ const ProductCard = ({ product, view = "grid", context = "product", onClick }) =
             </RoundButton>
 
             <RoundButton
-              className={`p-1 ${isInWishlist ? "button-round-active bg-gray-300 cursor-not-allowed" : ""}`}
+              className={`p-1 ${isInWishlist ? "button-round-active bg-gray-300 cursor-not-allowed" : ""
+                }`}
               onClick={handleAddWishlist}
               disabled={isInWishlist}
             >
               <CiHeart size={15} />
             </RoundButton>
-
           </>
         )}
+
         {context === "wishlist" && (
           <>
             <RoundButton
-              className={`p-1 ${isInCart ? "button-round-active bg-gray-300 cursor-not-allowed" : ""}`}
+              className={`p-1 ${isInCart ? "button-round-active bg-gray-300 cursor-not-allowed" : ""
+                }`}
               onClick={handleAddToCart}
               disabled={isInCart}
             >
@@ -136,6 +154,7 @@ const ProductCard = ({ product, view = "grid", context = "product", onClick }) =
             </RoundButton>
           </>
         )}
+
         {context === "cart" && (
           <RoundButton className="p-1" onClick={handleRemoveFromCart}>
             <CiTrash size={15} />
@@ -143,8 +162,15 @@ const ProductCard = ({ product, view = "grid", context = "product", onClick }) =
         )}
       </div>
 
-      <ProductInfo product={product} onClick={onClick} />
+      {/* Product Info */}
+      <div
+        className={`${view === "list" ? "flex-1 w-full sm:w-auto" : "w-full"
+          } px-2 py-2 sm:px-4`}
+      >
+        <ProductInfo product={product} onClick={onClick} />
+      </div>
 
+      {/* Quantity Control (Cart Only) */}
       {context === "cart" && (
         <div className="p-4 flex items-center space-x-2">
           <RoundButton onClick={() => handleQtyChange(-1)}>
@@ -157,6 +183,7 @@ const ProductCard = ({ product, view = "grid", context = "product", onClick }) =
         </div>
       )}
     </CardBody>
+
   );
 };
 

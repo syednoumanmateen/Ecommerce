@@ -28,11 +28,9 @@ export const useProducts = () => {
 };
 
 export const useProduct = (_id) => {
-
   return useQuery({
     queryKey: ["product", _id],
-    queryFn: () => getProductById(_id),
-    enabled: !!_id,
+    queryFn: () => getProductById(_id)
   });
 };
 
@@ -58,7 +56,7 @@ export const useUpdateProduct = () => {
   });
 };
 
-export const useDeleteProduct = () => {
+export const useDeleteProduct = (_id) => {
   const queryClient = useQueryClient();
 
   return useMutation({

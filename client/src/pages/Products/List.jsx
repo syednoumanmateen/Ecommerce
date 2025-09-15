@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { IoGrid, IoList } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import { useProducts } from "../../api/productsApiHooks";
@@ -10,8 +11,15 @@ import { setPagination, setView } from "../../store/slices/productSlice";
 
 const List = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { view, filters, search, pagination } = useSelector((state) => state.product);
-  const { data: productsData } = useProducts();
+
+  const { data: productsData, isLoading } = useProducts({
+    page: pagination.page,
+    limit: pagination.limit || 12,
+    filters,
+    search,
+  });
 
   const products = productsData?.data?.data ?? [];
   const totalPages = productsData?.data?.pages ?? 1;
@@ -59,13 +67,16 @@ const List = () => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row h-full min-h-screen gap-2 p-2">
-      <aside className="w-full md:w-75 p-2  overflow-y-auto scrollbar-hide">
+    <div className="flex flex-col md:flex-row min-h-screen gap-2 p-2">
+      {/* Sidebar (Filters) */}
+      <aside className="w-full md:w-72 p-2 md:sticky top-0 h-fit md:h-screen overflow-y-auto scrollbar-hide rounded">
         <ProductFilter />
       </aside>
 
-      <main className="flex-1 flex flex-col">
-        <header className="p-2 mx-2 flex justify-between items-center">
+      {/* Main Content Area */}
+      <main className="flex-1 flex flex-col overflow-hidden">
+        {/* Header */}
+        <header className="p-2 mx-2 flex flex-row justify-between items-start gap-2">
           <h1 className="text-xl font-semibold">Product Listing</h1>
           <div className="flex space-x-2">
             {[
@@ -83,17 +94,26 @@ const List = () => {
           </div>
         </header>
 
+        {/* Product List */}
         <section className="flex-1 overflow-y-auto scrollbar-hide p-2">
-          {products.length > 0 ? (
+          {isLoading ? (
+            <p className="text-gray-500 text-center mt-10">Loading products...</p>
+          ) : products.length > 0 ? (
             <div
               className={
                 view === "grid"
-                  ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4"
-                  : "grid grid-cols-1 gap-4"
+                  ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4"
+                  : "flex flex-col gap-4"
               }
             >
               {products.map((product) => (
-                <ProductCard key={product._id} product={product} view={view} context="product" />
+                <ProductCard
+                  key={product._id}
+                  product={product}
+                  view={view}
+                  context="product"
+                  onClick={() => navigate(`/product/details/${product._id}`)}
+                />
               ))}
             </div>
           ) : (
@@ -101,7 +121,8 @@ const List = () => {
           )}
         </section>
 
-        <footer className="p-4 flex flex-wrap justify-center items-center bg-white gap-2">
+        {/* Pagination Footer */}
+        <footer className="p-4 flex flex-wrap justify-center items-center bg-white gap-2 border-t">
           {pagination.page > 1 && (
             <Button className="p-2" onClick={() => goToPage(pagination.page - 1)}>
               Previous
