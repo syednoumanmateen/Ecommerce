@@ -62,14 +62,12 @@ const AppContent = () => {
       <GlobalLoader />
       <Suspense fallback={<Loader />}>
         <Routes>
-          
           <Route element={<UnProtected />}>
             {unprotectedRoutes.map(({ path, element }) => (
               <Route key={path} path={path} element={element} />
             ))}
           </Route>
 
-          
           <Route element={<Protected />}>
             {protectedRoutes.map(({ path, element }) => (
               <Route key={path} path={path} element={element} />
