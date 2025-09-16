@@ -1,28 +1,20 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { setSearch } from "../store/slices/productSlice";
 
 import LogoHeader from "./logo/LogoHeader";
-import TextInputIcon from "./UI/TextInputIcon";
 import DropDown from "./UI/DropDown";
+import TextInputIcon from "./UI/TextInputIcon";
 
-import { IoMdSearch } from "react-icons/io";
-import { MdOutlineChair } from "react-icons/md";
-import { HiOutlineHomeModern } from "react-icons/hi2";
-import { TbBrandDeezer } from "react-icons/tb";
-import { BiCategory } from "react-icons/bi";
-import { GiGearStickPattern } from "react-icons/gi";
-import { CiUser, CiHeart } from "react-icons/ci";
-import { IoBagOutline } from "react-icons/io5";
+import { CiHeart, CiUser } from "react-icons/ci";
 import { HiMenu, HiX } from "react-icons/hi";
+import { IoMdSearch } from "react-icons/io";
+import { IoBagOutline } from "react-icons/io5";
+import { MdOutlineChair } from "react-icons/md";
 
 const navItems = [
-  { label: "Products", icon: <MdOutlineChair />, path: "/products" },
-  { label: "Room", icon: <HiOutlineHomeModern />, path: "/rooms" },
-  { label: "Category", icon: <BiCategory />, path: "/categories" },
-  { label: "Brand", icon: <TbBrandDeezer />, path: "/brands" },
-  { label: "Pattern", icon: <GiGearStickPattern />, path: "/patterns" },
+  { label: "Products", icon: <MdOutlineChair />, path: "/" },
 ];
 
 const cartIcons = [
@@ -49,7 +41,6 @@ const Navbar = () => {
 
   return (
     <nav className="bg-white shadow-md w-full z-50">
-      {/* Top bar */}
       <div className="flex items-center justify-between px-4 py-2 md:px-8 md:py-4">
         <div className="flex items-center space-x-4">
           <div className="cursor-pointer" onClick={() => navigate("/")}>
@@ -98,7 +89,6 @@ const Navbar = () => {
             )}
           </div>
 
-          {/* Hamburger for mobile */}
           <button
             className="md:hidden focus:outline-none text-gray-700"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -108,7 +98,6 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile Menu */}
       {mobileMenuOpen && (
         <div className="md:hidden px-4 pb-4 space-y-4 border-gray-200 bg-white">
           <div className="space-y-2">

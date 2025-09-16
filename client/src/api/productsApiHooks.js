@@ -1,10 +1,7 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import {
   getProducts,
-  getProductById,
-  addProduct,
-  updateProduct,
-  deleteProduct,
+  getProductById
 } from "../api/api";
 import { useSelector } from "react-redux";
 
@@ -31,38 +28,5 @@ export const useProduct = (_id) => {
   return useQuery({
     queryKey: ["product", _id],
     queryFn: () => getProductById(_id)
-  });
-};
-
-export const useAddProduct = () => {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: (data) => addProduct(data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["product"] });
-    },
-  });
-};
-
-export const useUpdateProduct = () => {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: ({ _id, data }) => updateProduct(_id, data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["product"] });
-    },
-  });
-};
-
-export const useDeleteProduct = (_id) => {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: (_id) => deleteProduct(_id),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["product"] });
-    },
   });
 };
