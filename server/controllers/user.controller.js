@@ -109,42 +109,6 @@ const resetPassword = async (req, res) => {
   }
 };
 
-const getProfile = async (req, res) => {
-  try {
-    if (!req.user) return res.status(401).json({ error: "Unauthorized" });
-    res.status(200).json({
-      user: sanitizeUser(req.user),
-      status: 200,
-    });
-  } catch (error) {
-    console.error("Get profile error:", error.message);
-    res.status(500).json({ error: "Failed to fetch profile", message: error.message });
-  }
-};
-
-const updateProfile = async (req, res) => {
-  try {
-    const user = await User.findById(req.user._id);
-
-    if (!user) return res.status(404).json({ error: "User not found" });
-
-    user.name = req.body.name || user.name;
-    user.email = req.body.email || user.email;
-    if (req.body.password) user.password = req.body.password;
-
-    await user.save();
-
-    res.status(200).json({
-      message: "Profile updated successfully",
-      user: sanitizeUser(user),
-      status: 200,
-    });
-  } catch (error) {
-    console.error("Update profile error:", error.message);
-    res.status(500).json({ error: "Update failed", message: error.message });
-  }
-};
-
 const verifyToken = async (req, res) => {
   const errorResponse = { message: "Invalid or expired token", valid: false };
 
@@ -170,7 +134,5 @@ module.exports = {
   login,
   forgotPassword,
   resetPassword,
-  getProfile,
-  updateProfile,
   verifyToken
 };

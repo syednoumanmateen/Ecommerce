@@ -98,11 +98,10 @@ const ProductCard = ({ product, view = "grid", context = "product", onClick }) =
   return (
     <CardBody
       className={`relative group ${view === "list"
-          ? "flex flex-col sm:flex-row items-center gap-4 p-4"
-          : "flex flex-col"
+        ? "flex flex-col sm:flex-row items-center gap-4 p-4"
+        : "flex flex-col"
         }`}
     >
-      {/* Image */}
       <div
         className={`${view === "list" ? "sm:w-1/4 w-full" : "w-full"
           } shrink-0 relative`}
@@ -162,15 +161,12 @@ const ProductCard = ({ product, view = "grid", context = "product", onClick }) =
         )}
       </div>
 
-      {/* Product Info */}
       <div
         className={`${view === "list" ? "flex-1 w-full sm:w-auto" : "w-full"
           } px-2 py-2 sm:px-4`}
       >
         <ProductInfo product={product} onClick={onClick} />
       </div>
-
-      {/* Quantity Control (Cart Only) */}
       {context === "cart" && (
         <div className="p-4 flex items-center space-x-2">
           <RoundButton onClick={() => handleQtyChange(-1)}>

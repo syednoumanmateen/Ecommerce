@@ -1,9 +1,7 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import {
   registerUser,
   loginUser,
-  getUserProfile,
-  updateUserProfile,
   forgotPassword,
   resetPassword,
   verifyToken,
@@ -34,23 +32,6 @@ export const useResetPassword = () => {
 
   return useMutation({
     mutationFn: (data) => resetPassword(data)
-  });
-};
-
-export const useUserProfile = () => {
-
-  return useQuery({
-    queryKey: ["user"],
-    queryFn: () => getUserProfile()
-  });
-};
-
-export const useUpdateUserProfile = () => {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: (data) => updateUserProfile(data),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["user"] }),
   });
 };
 

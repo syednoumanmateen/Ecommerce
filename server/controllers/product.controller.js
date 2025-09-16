@@ -2,28 +2,6 @@ const mongoose = require("mongoose");
 const Product = require("../models/Product.model");
 const productPopulatePipeline = require("../helper");
 
-const isValidObjectId = (_id) => mongoose.Types.ObjectId.isValid(_id);
-
-const addProduct = async (req, res) => {
-  try {
-    const product = new Product(req.body);
-    await product.save();
-
-    res.status(201).json({
-      data: product,
-      message: "Product created successfully",
-      status: 201,
-    });
-  } catch (error) {
-    console.error("Add Product error:", error.message);
-    res.status(500).json({
-      error: "Internal server error",
-      message: error.message,
-      status: 500,
-    });
-  }
-};
-
 const getProducts = async (req, res) => {
   try {
     const {
@@ -171,70 +149,7 @@ const getProduct = async (req, res) => {
   }
 };
 
-const updateProduct = async (req, res) => {
-  try {
-    const { _id } = req.params;
-
-    if (!isValidObjectId(_id)) {
-      return res.status(400).json({ error: "Invalid product _id", status: 400 });
-    }
-
-    const updated = await Product.findByIdAndUpdate(_id, req.body, {
-      new: true,
-      runValidators: true,
-    });
-
-    if (!updated) {
-      return res.status(404).json({ error: "Product not found", status: 404 });
-    }
-
-    res.status(200).json({
-      data: updated,
-      message: "Product updated successfully",
-      status: 200,
-    });
-  } catch (error) {
-    console.error("Update Product error:", error.message);
-    res.status(500).json({
-      error: "Internal server error",
-      message: error.message,
-      status: 500,
-    });
-  }
-};
-
-const deleteProduct = async (req, res) => {
-  try {
-    const { _id } = req.params;
-
-    if (!isValidObjectId(_id)) {
-      return res.status(400).json({ error: "Invalid product _id", status: 400 });
-    }
-
-    const deleted = await Product.findByIdAndDelete(_id);
-
-    if (!deleted) {
-      return res.status(404).json({ error: "Product not found", status: 404 });
-    }
-
-    res.status(200).json({
-      message: "Product deleted successfully",
-      status: 200,
-    });
-  } catch (error) {
-    console.error("Delete Product error:", error.message);
-    res.status(500).json({
-      error: "Internal server error",
-      message: error.message,
-      status: 500,
-    });
-  }
-};
-
 module.exports = {
-  addProduct,
   getProducts,
   getProduct,
-  updateProduct,
-  deleteProduct,
 };

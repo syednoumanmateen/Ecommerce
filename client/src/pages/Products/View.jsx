@@ -127,7 +127,7 @@ const View = () => {
             <span className="text-green-600 text-xs md:text-sm">{product.quantity} in stock</span>
           </div>
 
-          <div className="flex items-center space-x-1 text-yellow-400 mb-4 text-sm md:text-base">
+          <div className="flex items-center space-x-1 text-primary mb-4 text-sm md:text-base">
             {Array(5)
               .fill(null)
               .map((_, i) => (
