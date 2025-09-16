@@ -12,12 +12,12 @@ const NotFound = () => {
       <p className="mb-8 text-gray-500 max-w-md">
         The page you're looking for doesn't exist or has been moved.
       </p>
-      <button
+      <Button
         onClick={() => navigate("/")}
-        className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+        className="button p-2"
       >
         Go Back Home
-      </button>
+      </Button>
     </div>
   );
 };

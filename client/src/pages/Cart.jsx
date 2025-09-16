@@ -4,9 +4,11 @@ import ProductCard from '../components/product/ProductCard';
 import { useUser } from '../context/UserContext';
 import { addCartItems } from '../store/slices/activeItemSlice';
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Cart = () => {
   const { userData } = useUser();
+  const navigate = useNavigate()
   const userId = userData?.user._id;
   const dispatch = useDispatch()
 
@@ -29,7 +31,8 @@ const Cart = () => {
             <div
               className="grid grid-cols-1 gap-4"            >
               {data?.data?.items?.map((product) => (
-                <ProductCard key={product._id} product={product} view={'list'} context="cart" />
+                <ProductCard key={product._id} product={product} view={'list'} context="cart" onClick={() => navigate(`/product/details/${product._id}`)}
+                />
               ))}
             </div>
           ) : (

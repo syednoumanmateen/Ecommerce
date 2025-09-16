@@ -2,7 +2,7 @@ import { Outlet, Navigate } from "react-router-dom";
 import { useUser } from "../../context/UserContext";
 
 const UnProtected = () => {
-    const { userData } = useUser();
+  const { userData } = useUser();
 
   if (userData) {
     return <Navigate to="/" replace />;
@@ -10,10 +10,10 @@ const UnProtected = () => {
 
   return (
     <div className="center-main">
-            <div className="w-1/3">
-                <Outlet />
-            </div>
-        </div>
+      <div className="w-1/3">
+        <Outlet />
+      </div>
+    </div>
   );
 };
 

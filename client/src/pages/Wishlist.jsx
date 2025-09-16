@@ -4,9 +4,11 @@ import ProductCard from '../components/product/ProductCard';
 import { useUser } from '../context/UserContext';
 import { addWishlistItems } from '../store/slices/activeItemSlice';
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Wishlist = () => {
   const { userData } = useUser();
+  const navigate = useNavigate()
   const userId = userData?.user._id;
   const dispatch = useDispatch()
 
@@ -29,7 +31,7 @@ const Wishlist = () => {
             <div
               className="grid grid-cols-1 gap-4"            >
               {data?.data?.items?.map((product) => (
-                <ProductCard key={product._id} product={product} view={'list'} context="wishlist" />
+                <ProductCard key={product._id} product={product} view={'list'} context="wishlist" onClick={() => navigate(`/product/details/${product._id}`)} />
               ))}
             </div>
           ) : (
