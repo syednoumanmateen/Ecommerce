@@ -1,10 +1,11 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import {
   getProducts,
   getProductById,
-  addProduct,
-  updateProduct,
-  deleteProduct,
+  getBrands,
+  getCategories,
+  getPatternTypes,
+  getShopRooms,
 } from "../api/api";
 import { useSelector } from "react-redux";
 
@@ -34,35 +35,33 @@ export const useProduct = (_id) => {
   });
 };
 
-export const useAddProduct = () => {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: (data) => addProduct(data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["product"] });
-    },
+export const useBrands = (filters = {}) => {
+  return useQuery({
+    queryKey: ['brand', filters],
+    queryFn: () => getBrands(filters),
   });
 };
 
-export const useUpdateProduct = () => {
-  const queryClient = useQueryClient();
+export const useCategories = (filters = {}) => {
 
-  return useMutation({
-    mutationFn: ({ _id, data }) => updateProduct(_id, data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["product"] });
-    },
+  return useQuery({
+    queryKey: ["category", filters],
+    queryFn: () => getCategories(filters)
   });
 };
 
-export const useDeleteProduct = (_id) => {
-  const queryClient = useQueryClient();
+export const usePatternTypes = (filters = {}) => {
 
-  return useMutation({
-    mutationFn: (_id) => deleteProduct(_id),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["product"] });
-    },
+  return useQuery({
+    queryKey: ["patterntype", filters],
+    queryFn: () => getPatternTypes(filters),
+  });
+};
+
+export const useShopRooms = (filters = {}) => {
+
+  return useQuery({
+    queryKey: ["shoproom", filters],
+    queryFn: () => getShopRooms(filters)
   });
 };

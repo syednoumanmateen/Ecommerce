@@ -4,10 +4,7 @@ import Accordion from "../UI/Accordion";
 import RadioGroup from "../UI/RadioGroup";
 import Button from "../UI/Button";
 import Rating from "../UI/Rating";
-import { useCategories } from "../../api/categoriesApiHooks";
-import { usePatternTypes } from "../../api/patternTypeApiHooks";
-import { useBrands } from "../../api/brandApiHooks";
-import { useShopRooms } from "../../api/shopRoomApiHooks";
+import { useCategories, usePatternTypes, useBrands, useShopRooms } from "../../api/productsApiHooks";
 import { setFilters, clearFilter } from "../../store/slices/productSlice";
 import { toast } from "react-toastify";
 
